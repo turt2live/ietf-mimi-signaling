@@ -44,6 +44,11 @@ servers and the MLS/encryption layer.
 
 # Introduction
 
+The More Instant Messaging Interoperability (MIMI) working group is responsible
+for specifying the minimal set of mechanics required to achieve interoperability
+among modern messaging providers. This document describes the signaling layer for
+that interoperable stack, as outlined by [**TODO**: Link to architecture].
+
 **TODO**: This.
 
 
