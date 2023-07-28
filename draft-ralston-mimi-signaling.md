@@ -19,11 +19,11 @@
 # Change the file extension to match the format (.xml for XML, etc...)
 #
 ###
-title: "TODO - Your title"
-abbrev: "TODO - Abbreviation"
+title: "MIMI Signaling"
+abbrev: "MIMI Signaling"
 category: info
 
-docname: draft-todo-yourname-protocol-latest
+docname: draft-ralston-mimi-signaling-latest
 submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
 number:
 date:
@@ -45,9 +45,9 @@ venue:
 
 author:
  -
-    fullname: Your Name Here
-    organization: Your Organization Here
-    email: your.email@example.com
+    fullname: Travis Ralston
+    organization: The Matrix.org Foundation C.I.C.
+    email: travisr@matrix.org
 
 normative:
 
@@ -56,14 +56,15 @@ informative:
 
 --- abstract
 
-TODO Abstract
+This document describes the MIMI Signaling Layer, covering the interaction between
+servers and the MLS/encryption layer.
 
 
 --- middle
 
 # Introduction
 
-TODO Introduction
+**TODO**: This.
 
 
 # Conventions and Definitions
@@ -73,7 +74,7 @@ TODO Introduction
 
 # Security Considerations
 
-TODO Security
+**TODO**: This.
 
 
 # IANA Considerations
@@ -86,4 +87,4 @@ This document has no IANA actions.
 # Acknowledgments
 {:numbered="false"}
 
-TODO acknowledge.
+**TODO**: This.
