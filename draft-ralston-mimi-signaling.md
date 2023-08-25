@@ -61,7 +61,7 @@ a chat, such as joining, parting, banning, etc. These user operations are valida
 through use of a defined policy envelope. The policy is enforced by the signaling
 layer, but described in another document **TODO**: Link to policy I-D.
 
-An overview of the architecture for MIMI is described by [I-D.barnes-mimi-arch **TODO**: Use a real link](https://bifurcation.github.io/mimi-arch/#go.draft-barnes-mimi-arch.html).
+An overview of the architecture for MIMI is described by [I-D.barnes-mimi-arch TODO: Use a real link](https://bifurcation.github.io/mimi-arch/#go.draft-barnes-mimi-arch.html).
 **TODO**: Ensure definitions of this doc and arch match
 
 The signaling layer described by this document deliberately does not concern itself
@@ -86,7 +86,7 @@ independent of their persistence.
 
 {::boilerplate bcp14-tagged}
 
-Terms from [I-D.barnes-mimi-arch **TODO**: Use a real link](https://bifurcation.github.io/mimi-arch/#go.draft-barnes-mimi-arch.html)
+Terms from [I-D.barnes-mimi-arch TODO: Use a real link](https://bifurcation.github.io/mimi-arch/#go.draft-barnes-mimi-arch.html)
 and {{!I-D.ralston-mimi-terminology}} are used throughout this document.
 
 
