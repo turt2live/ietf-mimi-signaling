@@ -59,16 +59,16 @@ their existing signaling.
 Signaling in the context of MIMI is the layer responsible for user-level operation of
 a chat, such as joining, parting, banning, etc. These user operations are validated
 through use of a defined policy envelope. The policy is enforced by the signaling
-layer, but described in another document [**TODO**: Link to policy I-D].
+layer, but described in another document **TODO**: Link to policy I-D.
 
-An overview of the architecture for MIMI is described by [I-D.barnes-mimi-arch [**TODO**: Use a real link]](https://bifurcation.github.io/mimi-arch/#go.draft-barnes-mimi-arch.html).
-[**TODO**: Ensure definitions of this doc and arch match]
+An overview of the architecture for MIMI is described by [I-D.barnes-mimi-arch **TODO**: Use a real link](https://bifurcation.github.io/mimi-arch/#go.draft-barnes-mimi-arch.html).
+**TODO**: Ensure definitions of this doc and arch match
 
 The signaling layer described by this document deliberately does not concern itself
 with the specifics of the encryption/security layer placed next to it. This allows
 existing messaging providers to insert their own external-to-MIMI encryption layer
-for immediate interoperability while they transition onto MIMI's MLS layer [**TODO**:
-Link to E2ES layer].
+for immediate interoperability while they transition onto MIMI's MLS layer **TODO**:
+Link to E2ES layer.
 
 This document specifies a model where rooms are a virtual place where *users* send
 events. Events can be application messages or policy configuration, and are extensible
@@ -86,13 +86,13 @@ independent of their persistence.
 
 {::boilerplate bcp14-tagged}
 
-Terms from [I-D.barnes-mimi-arch [**TODO**: Use a real link]](https://bifurcation.github.io/mimi-arch/#go.draft-barnes-mimi-arch.html)
+Terms from [I-D.barnes-mimi-arch **TODO**: Use a real link](https://bifurcation.github.io/mimi-arch/#go.draft-barnes-mimi-arch.html)
 and {{!I-D.ralston-mimi-terminology}} are used throughout this document.
 
 
 # Room Model {#int-room-model}
 
-[**TODO**: Check for overlap with arch]
+**TODO**: Check for overlap with arch
 
 Rooms are a virtual place where events are sent among users. Receiving events is largely
 left as a transport responsibility. Events reference the event which was sent previous
@@ -157,7 +157,7 @@ Room IDs MUST be case sensitive and MUST NOT exceed 255 characters.
 
 Example: `@watch/for/slashes:example.org`
 
-[**TODO**: Describe how pseudo IDs work]
+**TODO**: Describe how pseudo IDs work
 
 
 # Auth Events
@@ -170,14 +170,14 @@ for the room. By name, they are:
 * The join rules event
 * The create event
 
-[**TODO**: The rest of this. Describe auth chain in more detail.]
+**TODO**: The rest of this. Describe auth chain in more detail.
 
 
 # History Model
 
-[**TODO**: This. Short version is servers only need the auth chain for all current members of
+**TODO**: This. Short version is servers only need the auth chain for all current members of
 the room upon joining (we can discard people who joined and already left, and old message events).
-Someone needs to keep a copy of each event somewhere though, otherwise the room breaks.]
+Someone needs to keep a copy of each event somewhere though, otherwise the room breaks.
 
 
 # [TODO: Sections]
@@ -191,7 +191,7 @@ Someone needs to keep a copy of each event somewhere though, otherwise the room 
 
 # Security Considerations
 
-[**TODO**: This]
+**TODO**: This
 
 
 # IANA Considerations
@@ -204,4 +204,4 @@ This document has no IANA actions.
 # Acknowledgments
 {:numbered="false"}
 
-[**TODO**: This]
+**TODO**: This
