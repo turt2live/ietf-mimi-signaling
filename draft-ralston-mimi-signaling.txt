@@ -3,9 +3,9 @@
 
 
 More Instant Messaging Interoperability                       T. Ralston
-Internet-Draft                          The Matrix.org Foundation C.I.C.
-Intended status: Informational                              28 July 2023
-Expires: 29 January 2024
+Internet-Draft                                                M. Hodgson
+Intended status: Informational          The Matrix.org Foundation C.I.C.
+Expires: 26 February 2024                                 25 August 2023
 
 
                              MIMI Signaling
@@ -13,8 +13,10 @@ Expires: 29 January 2024
 
 Abstract
 
-   This document describes the MIMI Signaling Layer, covering the
-   interaction between servers and the MLS/encryption layer.
+   The MIMI signaling layer is responsible for user-level interactions
+   in the overall messaging stack.  It is aware of encryption, and more
+   specifically MLS, but does not have a dependency on any particular
+   encryption or security layer.
 
 About This Document
 
@@ -48,7 +50,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 29 January 2024.
+   This Internet-Draft will expire on 26 February 2024.
 
 Copyright Notice
 
@@ -68,21 +70,59 @@ Table of Contents
 
    1.  Introduction
    2.  Conventions and Definitions
-   3.  Security Considerations
-   4.  IANA Considerations
-   5.  Normative References
+   3.  Room Model
+   4.  User Model
+   5.  Auth Events
+   6.  History Model
+   7.  [TODO: Sections]
+   8.  Security Considerations
+   9.  IANA Considerations
+   10. References
+     10.1.  Normative References
+     10.2.  Informative References
    Acknowledgments
-   Author's Address
+   Authors' Addresses
 
 1.  Introduction
 
    The More Instant Messaging Interoperability (MIMI) working group is
-   responsible for specifying the minimal set of mechanics required to
-   achieve interoperability among modern messaging providers.  This
-   document describes the signaling layer for that interoperable stack,
-   as outlined by [*TODO*: Link to architecture].
+   responsible for specifying a protocol to achieve interoperability
+   among modern messaging providers.  Most providers do not currently
+   support Messaging Layer Security (MLS) [RFC9420], a chartered
+   requirement of MIMI, but do support other forms of encryption
+   alongside their existing signaling.
 
-   *TODO*: This.
+   Signaling in the context of MIMI is the layer responsible for user-
+   level operation of a chat, such as joining, parting, banning, etc.
+   These user operations are validated through use of a defined policy
+   envelope.  The policy is enforced by the signaling layer, but
+   described in another document *TODO*: Link to policy I-D.
+
+   An overview of the architecture for MIMI is described by I-D.barnes-
+   mimi-arch TODO: Use a real link (https://bifurcation.github.io/mimi-
+   arch/#go.draft-barnes-mimi-arch.html). *TODO*: Ensure definitions of
+   this doc and arch match
+
+   The signaling layer described by this document deliberately does not
+   concern itself with the specifics of the encryption/security layer
+   placed next to it.  This allows existing messaging providers to
+   insert their own external-to-MIMI encryption layer for immediate
+   interoperability while they transition onto MIMI's MLS layer *TODO*:
+   Link to E2ES layer.
+
+   This document specifies a model where rooms are a virtual place where
+   _users_ send events.  Events can be application messages or policy
+   configuration, and are extensible in nature.  The specific policy
+   being used by a room is described during creation, and enforced
+   within context of that room.  Other layers, such as the encryption &
+   security layer, may apply the policy further.  For example,
+   preventing a client from joining an MLS group if they are not a
+   member of the accompanying room.
+
+   Rooms and the events they contain can be persisted in a wide variety
+   of ways, such as within an MLS group itself through extensions.  This
+   document specifies abstract concepts independent of their
+   persistence.
 
 2.  Conventions and Definitions
 
@@ -92,31 +132,175 @@ Table of Contents
    BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
    capitals, as shown here.
 
-3.  Security Considerations
+   Terms from I-D.barnes-mimi-arch TODO: Use a real link
+   (https://bifurcation.github.io/mimi-arch/#go.draft-barnes-mimi-
+   arch.html) and [I-D.ralston-mimi-terminology] are used throughout
+   this document.
 
-   *TODO*: This.
+3.  Room Model
 
-4.  IANA Considerations
+   *TODO*: Check for overlap with arch
+
+   Rooms are a virtual place where events are sent among users.
+   Receiving events is largely left as a transport responsibility.
+   Events reference the event which was sent previous to it.  This
+   linear singly linked list is known as the "room history".  Sequencing
+   of events into the room history is done by the hub server for the
+   room.
+
+   Events have two primary shapes:
+
+   *  *State events*, containing metadata and policy configuration.
+
+   *  *Message events*, or non-state events, containing application-
+      specific data.  For example, encrypted conversation activity.
+
+   State events which affect how the room's policy functions are called
+   *auth events*. Message events can never be an auth event.  Each
+   event, regardless of its shape, references the auth events which
+   permit it to be sent in the room.  The *auth chain* for an event is
+   retrieved by recursing through the auth events of the event.  That
+   is, retrieving the auth events for the event's own auth events, the
+   auth events of those auth events, and so on.
+
+   The first event in the room is the "create event".  This event
+   defines what specific policy and encryption/security descriptions are
+   in use by the room, and is itself an auth event for _all_ other
+   events.  It MUST NOT have any preceeding events.
+
+   Rooms are identified using a *localpart* and the server name which
+   originally created it.  The server name in a room ID is used to
+   enforce a namespace but otherwise serves no meaning.  When another
+   hub takes ownership of a room the room ID does not change.  Room IDs
+   are not intended to be human readable or shown to users.
+
+   The ABNF [RFC5234] grammar for a room ID is:
+
+   room_id = "!" room_id_localpart ":" server_name
+   room_id_localpart = 1*opaque
+   opaque = DIGIT / ALPHA / "-" / "." / "~" / "_"
+
+   server_name is assumed to be compliant with Section 2.1 of [RFC1123].
+
+   Room IDs MUST be case sensitive and MUST NOT exceed 255 characters.
+
+   Example: !cEXuEjziVcCzbxbqmN:example.org
+
+4.  User Model
+
+   Users belong to a server, and are represented by a user ID.  Each
+   user ID has a *localpart* and references the server which is
+   responsible for that user.
+
+   The ABNF [RFC5234] grammar for a user ID is:
+
+   user_id = "@" user_id_localpart ":" server_name
+   user_id_localpart = 1*user_id_char
+   user_id_char = DIGIT
+                / %x61-7A                   ; a-z
+                / "-" / "." / "="
+                / "_" / "/" / "+"
+
+   Like room IDs, server_name is assumed to be compliant with
+   Section 2.1 of [RFC1123].
+
+   Room IDs MUST be case sensitive and MUST NOT exceed 255 characters.
+
+   Example: @watch/for/slashes:example.org
+
+   *TODO*: Describe how pseudo IDs work
+
+5.  Auth Events
+
+   Mentioned in Section 3, auth events are the state events which
+   configure the policy for the room.  By name, they are:
+
+   *  Membership events
+
+   *  Role events
+
+   *  The join rules event
+
+   *  The create event
+
+   *TODO*: The rest of this.  Describe auth chain in more detail.
+
+6.  History Model
+
+   *TODO*: This.  Short version is servers only need the auth chain for
+   all current members of the room upon joining (we can discard people
+   who joined and already left, and old message events).  Someone needs
+   to keep a copy of each event somewhere though, otherwise the room
+   breaks.
+
+7.  [TODO: Sections]
+
+   *  Event schema/shape.  Do not require JSON, through signing might
+      need a canonical format.
+
+      -  Including hashes and event ID behaviours
+
+   *  Join, leave, etc operations overview.
+
+   *  [User ->] Follower -> Hub send path.
+
+   *  Actual examples of an event?
+
+8.  Security Considerations
+
+   *TODO*: This
+
+9.  IANA Considerations
 
    This document has no IANA actions.
 
-5.  Normative References
+10.  References
+
+10.1.  Normative References
+
+   [I-D.ralston-mimi-terminology]
+              Ralston, T., "MIMI Terminology", Work in Progress,
+              Internet-Draft, draft-ralston-mimi-terminology-02, 10 July
+              2023, <https://datatracker.ietf.org/doc/html/draft-
+              ralston-mimi-terminology-02>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/rfc/rfc2119>.
 
+   [RFC5234]  Crocker, D., Ed. and P. Overell, "Augmented BNF for Syntax
+              Specifications: ABNF", STD 68, RFC 5234,
+              DOI 10.17487/RFC5234, January 2008,
+              <https://www.rfc-editor.org/rfc/rfc5234>.
+
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
 
+10.2.  Informative References
+
+   [RFC1123]  Braden, R., Ed., "Requirements for Internet Hosts -
+              Application and Support", STD 3, RFC 1123,
+              DOI 10.17487/RFC1123, October 1989,
+              <https://www.rfc-editor.org/rfc/rfc1123>.
+
+   [RFC9420]  Barnes, R., Beurdouche, B., Robert, R., Millican, J.,
+              Omara, E., and K. Cohn-Gordon, "The Messaging Layer
+              Security (MLS) Protocol", RFC 9420, DOI 10.17487/RFC9420,
+              July 2023, <https://www.rfc-editor.org/rfc/rfc9420>.
+
 Acknowledgments
 
-   *TODO*: This.
+   *TODO*: This
 
-Author's Address
+Authors' Addresses
 
    Travis Ralston
    The Matrix.org Foundation C.I.C.
    Email: travisr@matrix.org
+
+
+   Matthew Hodgson
+   The Matrix.org Foundation C.I.C.
+   Email: matthew@matrix.org
