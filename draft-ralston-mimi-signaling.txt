@@ -5,7 +5,7 @@
 More Instant Messaging Interoperability                       T. Ralston
 Internet-Draft                                                M. Hodgson
 Intended status: Informational          The Matrix.org Foundation C.I.C.
-Expires: 26 February 2024                                 25 August 2023
+Expires: 2 March 2024                                     30 August 2023
 
 
                              MIMI Signaling
@@ -50,7 +50,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 26 February 2024.
+   This Internet-Draft will expire on 2 March 2024.
 
 Copyright Notice
 
@@ -71,8 +71,12 @@ Table of Contents
    1.  Introduction
    2.  Conventions and Definitions
    3.  Room Model
+     3.1.  Room History
+     3.2.  User and Server Participation
    4.  User Model
    5.  Auth Events
+     5.1.  m.room.create
+     5.2.  m.room.user
    6.  History Model
    7.  [TODO: Sections]
    8.  Security Considerations
@@ -124,6 +128,10 @@ Table of Contents
    document specifies abstract concepts independent of their
    persistence.
 
+   Finally, this signaling layer is agnostic of transport.  Its events
+   can be re-framed for sending between servers without affecting
+   signaling itself.
+
 2.  Conventions and Definitions
 
    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
@@ -141,38 +149,68 @@ Table of Contents
 
    *TODO*: Check for overlap with arch
 
-   Rooms are a virtual place where events are sent among users.
-   Receiving events is largely left as a transport responsibility.
-   Events reference the event which was sent previous to it.  This
-   linear singly linked list is known as the "room history".  Sequencing
-   of events into the room history is done by the hub server for the
-   room.
+   A room is a conceptual place where events are sent among users.
+   These events carry information such as the new policy configuration,
+   application messages, and other room state information as needed.
+   Receiving events is left as a responsibility for the transport.
 
-   Events have two primary shapes:
+   Rooms have two primary event definitions:
 
    *  *State events*, containing metadata and policy configuration.
 
-   *  *Message events*, or non-state events, containing application-
-      specific data.  For example, encrypted conversation activity.
+   *  *Message events*, containing application-specific data.  For
+      example, encrypted conversation activity.
 
-   State events which affect how the room's policy functions are called
-   *auth events*. Message events can never be an auth event.  Each
-   event, regardless of its shape, references the auth events which
-   permit it to be sent in the room.  The *auth chain* for an event is
-   retrieved by recursing through the auth events of the event.  That
-   is, retrieving the auth events for the event's own auth events, the
-   auth events of those auth events, and so on.
+   Events reference the event preceeding themselves linearly.  The hub
+   server is expected to enforce this linear relationship, and therefore
+   events have two representations.  Events not yet processed by a hub
+   server are known as "limited events", and are lacking authorization
+   and ordering information.  They are not sent until they become
+   "fully-formed events" by a hub server, where the missing auth and
+   ordering fields are added.  A hub server MUST only emit fully-formed
+   events over its transport, though it does _receive_ limited events
+   from other follower servers.
+
+   Throughout this document, the word "event" means "fully-formed event"
+   unless otherwise qualified as a "limited event".  This implies that
+   the event has been accepted by the hub into the room.
+
+   Each room has exactly one set of policies it follows.  Once the
+   policy is set, it cannot have rules added or removed.  The policy can
+   only be configured using state events.  The ability to send any
+   particular event is determined by policy.  If a room wishes to use a
+   new set of policies, it must replace itself using a new room
+   identifier.
+
+   The state events which affect how the policy operates are known as
+   "auth events".  Message events can never be an auth event.  Both
+   message and state events reference the auth events which permit it to
+   be sent to the room, authorizing its existence in that room.  The
+   "auth chain" for an event is the recursive collection of auth events.
+   That is, the auth events for the event and the auth events of those
+   events and so on.
 
    The first event in the room is the "create event".  This event
-   defines what specific policy and encryption/security descriptions are
-   in use by the room, and is itself an auth event for _all_ other
-   events.  It MUST NOT have any preceeding events.
+   defines the specific set of policies the room is using.  The create
+   event MUST NOT have any preceeding events, and MUST be an auth event
+   for all future events.  The create event additionally specifies the
+   specific encryption algorithm and configuration for the room,
+   enabling the room's choice of encryption & security layers.  For
+   MIMI, this is expected to be the algorithm specified by *TODO*: Link
+   to E2ES I-D.
 
-   Rooms are identified using a *localpart* and the server name which
-   originally created it.  The server name in a room ID is used to
-   enforce a namespace but otherwise serves no meaning.  When another
-   hub takes ownership of a room the room ID does not change.  Room IDs
-   are not intended to be human readable or shown to users.
+   The create event is described in more detail in Section 5.1.
+
+   Rooms are identified under the creating server's domain, creating a
+   namespace.  Room IDs are not intended to be parsed or human readable.
+   The unique portion of the room ID, the localpart, is deliberately an
+   implementation detail.  Servers can use any pattern they wish for
+   localparts, so long as the resulting room ID hasn't been used before.
+
+   The server name in the room ID is only used to validate the create
+   event and declare the initial hub server in the room.  Otherwise, the
+   server name serves no purpose.  The server might not even be
+   participating in the room anymore.
 
    The ABNF [RFC5234] grammar for a room ID is:
 
@@ -180,11 +218,33 @@ Table of Contents
    room_id_localpart = 1*opaque
    opaque = DIGIT / ALPHA / "-" / "." / "~" / "_"
 
-   server_name is assumed to be compliant with Section 2.1 of [RFC1123].
+   server_name is as described by I-D.barnes-mimi-arch TODO: Use a real
+   link (https://bifurcation.github.io/mimi-arch/#go.draft-barnes-mimi-
+   arch.html).
 
    Room IDs MUST be case sensitive and MUST NOT exceed 255 characters.
 
    Example: !cEXuEjziVcCzbxbqmN:example.org
+
+3.1.  Room History
+
+   Consider the following series of events:
+
+   A <-- B <-- C <-- D
+
+                        Figure 1: A four event room.
+
+   The first event, A, is the create event (Section 5.1) for the room.
+   B is the creator's join event (Section 5.2), C could be an encrypted
+   "hello world" text message, and D an invite (Section 5.2) for another
+   user.  Collectively, this linear set of events creates the history
+   for the room.
+
+   *TODO*: Does history visibility go here?
+
+3.2.  User and Server Participation
+
+   *TODO*: This?
 
 4.  User Model
 
@@ -224,6 +284,14 @@ Table of Contents
    *  The create event
 
    *TODO*: The rest of this.  Describe auth chain in more detail.
+
+5.1.  m.room.create
+
+   *TODO*: This.
+
+5.2.  m.room.user
+
+   *TODO*: This.
 
 6.  History Model
 

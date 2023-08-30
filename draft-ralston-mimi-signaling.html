@@ -1056,7 +1056,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Ralston &amp; Hodgson</td>
-<td class="center">Expires 26 February 2024</td>
+<td class="center">Expires 2 March 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1069,12 +1069,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ralston-mimi-signaling-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-08-25" class="published">25 August 2023</time>
+<time datetime="2023-08-30" class="published">30 August 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-02-26">26 February 2024</time></dd>
+<dd class="expires"><time datetime="2024-03-02">2 March 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1130,7 +1130,7 @@ have a dependency on any particular encryption or security layer.<a href="#secti
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 26 February 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 2 March 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1166,13 +1166,29 @@ have a dependency on any particular encryption or security layer.<a href="#secti
             <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-conventions-and-definitions" class="internal xref">Conventions and Definitions</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
-            <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-room-model" class="internal xref">Room Model</a></p>
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-room-model" class="internal xref">Room Model</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
+                <p id="section-toc.1-1.3.2.1.1" class="keepWithNext"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-room-history" class="internal xref">Room History</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
+                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-user-and-server-participati" class="internal xref">User and Server Participation</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
             <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-user-model" class="internal xref">User Model</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
             <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-auth-events" class="internal xref">Auth Events</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-mroomcreate" class="internal xref"><code>m.room.create</code></a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
+                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-mroomuser" class="internal xref"><code>m.room.user</code></a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
             <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-history-model" class="internal xref">History Model</a></p>
@@ -1237,6 +1253,8 @@ MLS group if they are not a member of the accompanying room.<a href="#section-1-
 <p id="section-1-6">Rooms and the events they contain can be persisted in a wide variety of ways, such as
 within an MLS group itself through extensions. This document specifies abstract concepts
 independent of their persistence.<a href="#section-1-6" class="pilcrow">¶</a></p>
+<p id="section-1-7">Finally, this signaling layer is agnostic of transport. Its events can be re-framed for
+sending between servers without affecting signaling itself.<a href="#section-1-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1258,43 +1276,105 @@ and <span>[<a href="#I-D.ralston-mimi-terminology" class="cite xref">I-D.ralston
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-room-model" class="section-name selfRef">Room Model</a>
       </h2>
 <p id="section-3-1"><strong>TODO</strong>: Check for overlap with arch<a href="#section-3-1" class="pilcrow">¶</a></p>
-<p id="section-3-2">Rooms are a virtual place where events are sent among users. Receiving events is largely
-left as a transport responsibility. Events reference the event which was sent previous
-to it. This linear singly linked list is known as the "room history". Sequencing of events
-into the room history is done by the hub server for the room.<a href="#section-3-2" class="pilcrow">¶</a></p>
-<p id="section-3-3">Events have two primary shapes:<a href="#section-3-3" class="pilcrow">¶</a></p>
+<p id="section-3-2">A room is a conceptual place where events are sent among users. These events carry information
+such as the new policy configuration, application messages, and other room state information
+as needed. Receiving events is left as a responsibility for the transport.<a href="#section-3-2" class="pilcrow">¶</a></p>
+<p id="section-3-3">Rooms have two primary event definitions:<a href="#section-3-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3-4.1">
           <strong>State events</strong>, containing metadata and policy configuration.<a href="#section-3-4.1" class="pilcrow">¶</a>
 </li>
         <li class="normal" id="section-3-4.2">
-          <strong>Message events</strong>, or non-state events, containing application-specific data. For example,
-encrypted conversation activity.<a href="#section-3-4.2" class="pilcrow">¶</a>
+          <strong>Message events</strong>, containing application-specific data. For example, encrypted conversation
+activity.<a href="#section-3-4.2" class="pilcrow">¶</a>
 </li>
       </ul>
-<p id="section-3-5">State events which affect how the room's policy functions are called <strong>auth events</strong>. Message
-events can never be an auth event. Each event, regardless of its shape, references the auth
-events which permit it to be sent in the room. The <strong>auth chain</strong> for an event is retrieved
-by recursing through the auth events of the event. That is, retrieving the auth events for the
-event's own auth events, the auth events of those auth events, and so on.<a href="#section-3-5" class="pilcrow">¶</a></p>
-<p id="section-3-6">The first event in the room is the "create event". This event defines what specific policy
-and encryption/security descriptions are in use by the room, and is itself an auth event for
-<em>all</em> other events. It <span class="bcp14">MUST NOT</span> have any preceeding events.<a href="#section-3-6" class="pilcrow">¶</a></p>
-<p id="section-3-7">Rooms are identified using a <strong>localpart</strong> and the server name which originally created it.
-The server name in a room ID is used to enforce a namespace but otherwise serves no meaning.
-When another hub takes ownership of a room the room ID does not change. Room IDs are not
-intended to be human readable or shown to users.<a href="#section-3-7" class="pilcrow">¶</a></p>
-<p id="section-3-8">The ABNF <span>[<a href="#RFC5234" class="cite xref">RFC5234</a>]</span> grammar for a room ID is:<a href="#section-3-8" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3-9">
+<p id="section-3-5">Events reference the event preceeding themselves linearly. The hub server is expected to enforce
+this linear relationship, and therefore events have two representations. Events not yet processed
+by a hub server are known as "limited events", and are lacking authorization and ordering information.
+They are not sent until they become "fully-formed events" by a hub server, where the missing
+auth and ordering fields are added. A hub server <span class="bcp14">MUST</span> only emit fully-formed events over its
+transport, though it does <em>receive</em> limited events from other follower servers.<a href="#section-3-5" class="pilcrow">¶</a></p>
+<p id="section-3-6">Throughout this document, the word "event" means "fully-formed event" unless otherwise qualified
+as a "limited event". This implies that the event has been accepted by the hub into the room.<a href="#section-3-6" class="pilcrow">¶</a></p>
+<p id="section-3-7">Each room has exactly one set of policies it follows. Once the policy is set, it cannot have
+rules added or removed. The policy can only be configured using state events. The ability to send
+any particular event is determined by policy. If a room wishes to use a new set of policies, it
+must replace itself using a new room identifier.<a href="#section-3-7" class="pilcrow">¶</a></p>
+<p id="section-3-8">The state events which affect how the policy operates are known as "auth events". Message events
+can never be an auth event. Both message and state events reference the auth events which permit
+it to be sent to the room, authorizing its existence in that room. The "auth chain" for an event
+is the recursive collection of auth events. That is, the auth events for the event and the auth
+events of those events and so on.<a href="#section-3-8" class="pilcrow">¶</a></p>
+<p id="section-3-9">The first event in the room is the "create event". This event defines the specific set of policies
+the room is using. The create event <span class="bcp14">MUST NOT</span> have any preceeding events, and <span class="bcp14">MUST</span> be an auth event
+for all future events. The create event additionally specifies the specific encryption algorithm
+and configuration for the room, enabling the room's choice of encryption &amp; security layers. For
+MIMI, this is expected to be the algorithm specified by <strong>TODO</strong>: Link to E2ES I-D.<a href="#section-3-9" class="pilcrow">¶</a></p>
+<p id="section-3-10">The create event is described in more detail in <a href="#int-ev-create" class="auto internal xref">Section 5.1</a>.<a href="#section-3-10" class="pilcrow">¶</a></p>
+<p id="section-3-11">Rooms are identified under the creating server's domain, creating a namespace. Room IDs are not
+intended to be parsed or human readable. The unique portion of the room ID, the localpart, is
+deliberately an implementation detail. Servers can use any pattern they wish for localparts, so
+long as the resulting room ID hasn't been used before.<a href="#section-3-11" class="pilcrow">¶</a></p>
+<p id="section-3-12">The server name in the room ID is only used to validate the create event and declare the initial
+hub server in the room. Otherwise, the server name serves no purpose. The server might not even
+be participating in the room anymore.<a href="#section-3-12" class="pilcrow">¶</a></p>
+<p id="section-3-13">The ABNF <span>[<a href="#RFC5234" class="cite xref">RFC5234</a>]</span> grammar for a room ID is:<a href="#section-3-13" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3-14">
 <pre>
 room_id = "!" room_id_localpart ":" server_name
 room_id_localpart = 1*opaque
 opaque = DIGIT / ALPHA / "-" / "." / "~" / "_"
-</pre><a href="#section-3-9" class="pilcrow">¶</a>
+</pre><a href="#section-3-14" class="pilcrow">¶</a>
 </div>
-<p id="section-3-10"><code>server_name</code> is assumed to be compliant with <span><a href="https://rfc-editor.org/rfc/rfc1123#section-2.1" class="relref">Section 2.1</a> of [<a href="#RFC1123" class="cite xref">RFC1123</a>]</span>.<a href="#section-3-10" class="pilcrow">¶</a></p>
-<p id="section-3-11">Room IDs <span class="bcp14">MUST</span> be case sensitive and <span class="bcp14">MUST NOT</span> exceed 255 characters.<a href="#section-3-11" class="pilcrow">¶</a></p>
-<p id="section-3-12">Example: <code>!cEXuEjziVcCzbxbqmN:example.org</code><a href="#section-3-12" class="pilcrow">¶</a></p>
+<p id="section-3-15"><code>server_name</code> is as described by <a href="https://bifurcation.github.io/mimi-arch/#go.draft-barnes-mimi-arch.html">I-D.barnes-mimi-arch TODO: Use a real link</a>.<a href="#section-3-15" class="pilcrow">¶</a></p>
+<p id="section-3-16">Room IDs <span class="bcp14">MUST</span> be case sensitive and <span class="bcp14">MUST NOT</span> exceed 255 characters.<a href="#section-3-16" class="pilcrow">¶</a></p>
+<p id="section-3-17">Example: <code>!cEXuEjziVcCzbxbqmN:example.org</code><a href="#section-3-17" class="pilcrow">¶</a></p>
+<div id="room-history">
+<section id="section-3.1">
+        <h3 id="name-room-history">
+<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-room-history" class="section-name selfRef">Room History</a>
+        </h3>
+<p id="section-3.1-1">Consider the following series of events:<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<span id="name-a-four-event-room"></span><div id="overview">
+<figure id="figure-1">
+          <div id="section-3.1-2.1">
+            <div class="alignLeft art-svg artwork" id="section-3.1-2.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="48" width="160" viewBox="0 0 160 48" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+                <path d="M 24,32 L 40,32" fill="none" stroke="black"></path>
+                <path d="M 72,32 L 88,32" fill="none" stroke="black"></path>
+                <path d="M 120,32 L 136,32" fill="none" stroke="black"></path>
+                <polygon class="arrowhead" points="128,32 116,26.4 116,37.6" fill="black" transform="rotate(180,120,32)"></polygon>
+                <polygon class="arrowhead" points="80,32 68,26.4 68,37.6" fill="black" transform="rotate(180,72,32)"></polygon>
+                <polygon class="arrowhead" points="32,32 20,26.4 20,37.6" fill="black" transform="rotate(180,24,32)"></polygon>
+                <g class="text">
+                  <text x="8" y="36">A</text>
+                  <text x="56" y="36">B</text>
+                  <text x="104" y="36">C</text>
+                  <text x="152" y="36">D</text>
+                </g>
+              </svg><a href="#section-3.1-2.1.1" class="pilcrow">¶</a>
+</div>
+</div>
+<figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
+<a href="#name-a-four-event-room" class="selfRef">A four event room.</a>
+          </figcaption></figure>
+</div>
+<p id="section-3.1-3">The first event, A, is the create event (<a href="#int-ev-create" class="auto internal xref">Section 5.1</a>) for the room. B is the creator's
+join event (<a href="#int-ev-user" class="auto internal xref">Section 5.2</a>), C could be an encrypted "hello world" text message, and D an
+invite (<a href="#int-ev-user" class="auto internal xref">Section 5.2</a>) for another user. Collectively, this linear set of events creates
+the history for the room.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
+<p id="section-3.1-4"><strong>TODO</strong>: Does history visibility go here?<a href="#section-3.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="user-and-server-participation">
+<section id="section-3.2">
+        <h3 id="name-user-and-server-participati">
+<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-user-and-server-participati" class="section-name selfRef">User and Server Participation</a>
+        </h3>
+<p id="section-3.2-1"><strong>TODO</strong>: This?<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 <div id="user-model">
@@ -1339,6 +1419,22 @@ for the room. By name, they are:<a href="#section-5-1" class="pilcrow">¶</a></p
 </li>
       </ul>
 <p id="section-5-3"><strong>TODO</strong>: The rest of this. Describe auth chain in more detail.<a href="#section-5-3" class="pilcrow">¶</a></p>
+<div id="int-ev-create">
+<section id="section-5.1">
+        <h3 id="name-mroomcreate">
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-mroomcreate" class="section-name selfRef"><code>m.room.create</code></a>
+        </h3>
+<p id="section-5.1-1"><strong>TODO</strong>: This.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="int-ev-user">
+<section id="section-5.2">
+        <h3 id="name-mroomuser">
+<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-mroomuser" class="section-name selfRef"><code>m.room.user</code></a>
+        </h3>
+<p id="section-5.2-1"><strong>TODO</strong>: This.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 <div id="history-model">
