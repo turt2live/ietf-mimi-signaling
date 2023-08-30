@@ -47,7 +47,6 @@ have a dependency on any particular encryption or security layer.
 
 --- middle
 
-
 # Introduction
 
 The More Instant Messaging Interoperability (MIMI) working group is responsible for
@@ -81,6 +80,8 @@ Rooms and the events they contain can be persisted in a wide variety of ways, su
 within an MLS group itself through extensions. This document specifies abstract concepts
 independent of their persistence.
 
+Finally, this signaling layer is agnostic of transport. Its events can be re-framed for
+sending between servers without affecting signaling itself.
 
 # Conventions and Definitions
 
@@ -89,36 +90,57 @@ independent of their persistence.
 Terms from [I-D.barnes-mimi-arch TODO: Use a real link](https://bifurcation.github.io/mimi-arch/#go.draft-barnes-mimi-arch.html)
 and {{!I-D.ralston-mimi-terminology}} are used throughout this document.
 
-
 # Room Model {#int-room-model}
 
 **TODO**: Check for overlap with arch
 
-Rooms are a virtual place where events are sent among users. Receiving events is largely
-left as a transport responsibility. Events reference the event which was sent previous
-to it. This linear singly linked list is known as the "room history". Sequencing of events
-into the room history is done by the hub server for the room.
+A room is a conceptual place where events are sent among users. These events carry information
+such as the new policy configuration, application messages, and other room state information
+as needed. Receiving events is left as a responsibility for the transport.
 
-Events have two primary shapes:
+Rooms have two primary event definitions:
 
 * **State events**, containing metadata and policy configuration.
-* **Message events**, or non-state events, containing application-specific data. For example,
-  encrypted conversation activity.
+* **Message events**, containing application-specific data. For example, encrypted conversation
+  activity.
 
-State events which affect how the room's policy functions are called **auth events**. Message
-events can never be an auth event. Each event, regardless of its shape, references the auth
-events which permit it to be sent in the room. The **auth chain** for an event is retrieved
-by recursing through the auth events of the event. That is, retrieving the auth events for the
-event's own auth events, the auth events of those auth events, and so on.
+Events reference the event preceeding themselves linearly. The hub server is expected to enforce
+this linear relationship, and therefore events have two representations. Events not yet processed
+by a hub server are known as "limited events", and are lacking authorization and ordering information.
+They are not sent until they become "fully-formed events" by a hub server, where the missing
+auth and ordering fields are added. A hub server MUST only emit fully-formed events over its
+transport, though it does *receive* limited events from other follower servers.
 
-The first event in the room is the "create event". This event defines what specific policy
-and encryption/security descriptions are in use by the room, and is itself an auth event for
-*all* other events. It MUST NOT have any preceeding events.
+Throughout this document, the word "event" means "fully-formed event" unless otherwise qualified
+as a "limited event". This implies that the event has been accepted by the hub into the room.
 
-Rooms are identified using a **localpart** and the server name which originally created it.
-The server name in a room ID is used to enforce a namespace but otherwise serves no meaning.
-When another hub takes ownership of a room the room ID does not change. Room IDs are not
-intended to be human readable or shown to users.
+Each room has exactly one set of policies it follows. Once the policy is set, it cannot have
+rules added or removed. The policy can only be configured using state events. The ability to send
+any particular event is determined by policy. If a room wishes to use a new set of policies, it
+must replace itself using a new room identifier.
+
+The state events which affect how the policy operates are known as "auth events". Message events
+can never be an auth event. Both message and state events reference the auth events which permit
+it to be sent to the room, authorizing its existence in that room. The "auth chain" for an event
+is the recursive collection of auth events. That is, the auth events for the event and the auth
+events of those events and so on.
+
+The first event in the room is the "create event". This event defines the specific set of policies
+the room is using. The create event MUST NOT have any preceeding events, and MUST be an auth event
+for all future events. The create event additionally specifies the specific encryption algorithm
+and configuration for the room, enabling the room's choice of encryption & security layers. For
+MIMI, this is expected to be the algorithm specified by **TODO**: Link to E2ES I-D.
+
+The create event is described in more detail in {{int-ev-create}}.
+
+Rooms are identified under the creating server's domain, creating a namespace. Room IDs are not
+intended to be parsed or human readable. The unique portion of the room ID, the localpart, is
+deliberately an implementation detail. Servers can use any pattern they wish for localparts, so
+long as the resulting room ID hasn't been used before.
+
+The server name in the room ID is only used to validate the create event and declare the initial
+hub server in the room. Otherwise, the server name serves no purpose. The server might not even
+be participating in the room anymore.
 
 The ABNF {{!RFC5234}} grammar for a room ID is:
 
@@ -128,12 +150,31 @@ room_id_localpart = 1*opaque
 opaque = DIGIT / ALPHA / "-" / "." / "~" / "_"
 ~~~
 
-`server_name` is assumed to be compliant with {{Section 2.1 of RFC1123}}.
+`server_name` is as described by [I-D.barnes-mimi-arch TODO: Use a real link](https://bifurcation.github.io/mimi-arch/#go.draft-barnes-mimi-arch.html).
 
 Room IDs MUST be case sensitive and MUST NOT exceed 255 characters.
 
 Example: `!cEXuEjziVcCzbxbqmN:example.org`
 
+## Room History
+
+Consider the following series of events:
+
+~~~aasvg
+A <-- B <-- C <-- D
+~~~
+{: #overview title="A four event room." }
+
+The first event, A, is the create event ({{int-ev-create}}) for the room. B is the creator's
+join event ({{int-ev-user}}), C could be an encrypted "hello world" text message, and D an
+invite ({{int-ev-user}}) for another user. Collectively, this linear set of events creates
+the history for the room.
+
+**TODO**: Does history visibility go here?
+
+## User and Server Participation
+
+**TODO**: This?
 
 # User Model
 
@@ -159,7 +200,6 @@ Example: `@watch/for/slashes:example.org`
 
 **TODO**: Describe how pseudo IDs work
 
-
 # Auth Events
 
 Mentioned in {{int-room-model}}, auth events are the state events which configure the policy
@@ -172,13 +212,19 @@ for the room. By name, they are:
 
 **TODO**: The rest of this. Describe auth chain in more detail.
 
+## `m.room.create` {#int-ev-create}
+
+**TODO**: This.
+
+## `m.room.user` {#int-ev-user}
+
+**TODO**: This.
 
 # History Model
 
 **TODO**: This. Short version is servers only need the auth chain for all current members of
 the room upon joining (we can discard people who joined and already left, and old message events).
 Someone needs to keep a copy of each event somewhere though, otherwise the room breaks.
-
 
 # [TODO: Sections]
 
@@ -188,16 +234,13 @@ Someone needs to keep a copy of each event somewhere though, otherwise the room 
 * `[User ->] Follower -> Hub` send path.
 * Actual examples of an event?
 
-
 # Security Considerations
 
 **TODO**: This
 
-
 # IANA Considerations
 
 This document has no IANA actions.
-
 
 --- back
 
