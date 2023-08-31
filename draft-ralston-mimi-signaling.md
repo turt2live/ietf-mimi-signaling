@@ -1,6 +1,6 @@
 ---
-title: "MIMI Signaling"
-abbrev: "MIMI Signaling"
+title: "MIMI Signaling Protocol"
+abbrev: "MIMI Signaling Protocol"
 category: info
 
 docname: draft-ralston-mimi-signaling-latest
@@ -12,9 +12,11 @@ v: 3
 area: "Applications and Real-Time"
 workgroup: "More Instant Messaging Interoperability"
 keyword:
- - next generation
- - unicorn
- - sparkling distributed ledger
+ - mimi
+ - signaling
+ - protocol
+ - layer
+ - messaging
 venue:
   group: "More Instant Messaging Interoperability"
   type: "Working Group"
@@ -41,9 +43,9 @@ informative:
 
 --- abstract
 
-The MIMI signaling layer is responsible for user-level interactions in the overall
-messaging stack. It is aware of encryption, and more specifically MLS, but does not
-have a dependency on any particular encryption or security layer.
+The MIMI signaling protocol is responsible for user-level interactions in the overall
+MIMI protocol stack. It implements a *membership control protocol* and methods for a
+*policy control protocol* to operate, as described by {{!I-D.barnes-mimi-arch}}.
 
 --- middle
 
@@ -55,40 +57,45 @@ Most providers do not currently support Messaging Layer Security (MLS) {{?RFC942
 a chartered requirement of MIMI, but do support other forms of encryption alongside
 their existing signaling.
 
-Signaling in the context of MIMI is the layer responsible for user-level operation of
-a chat, such as joining, parting, banning, etc. These user operations are validated
-through use of a defined policy envelope. The policy is enforced by the signaling
-layer, but described in another document **TODO**: Link to policy I-D.
+Within the MIMI stack of protocols, signaling is responsible for coordinating user-level
+actions and membership. This document describes such a protocol, encompassing a membership
+control protocol and a framework for a policy control protocol.
 
-An overview of the architecture for MIMI is described by [I-D.barnes-mimi-arch TODO: Use a real link](https://bifurcation.github.io/mimi-arch/#go.draft-barnes-mimi-arch.html).
-**TODO**: Ensure definitions of this doc and arch match
+An overview of the architecture, including the control protocols mentioned, is described
+by {{!I-D.barnes-mimi-arch}}. A proposed policy control protocol running over this
+signaling protocol is described by **TODO(TR): Policy draft**.
 
-The signaling layer described by this document deliberately does not concern itself
-with the specifics of the encryption/security layer placed next to it. This allows
-existing messaging providers to insert their own external-to-MIMI encryption layer
-for immediate interoperability while they transition onto MIMI's MLS layer **TODO**:
-Link to E2ES layer.
+MIMI has a chartered requirement to use MLS in the encryption/security protocol, however
+most existing messaging providers do not currently use MLS in their encryption. This
+document describes an approach for enabling a given encryption/security protocol without
+concerning itself with the specifics of such a protocol. This allows existing messaging
+providers to insert their own encryption/security protocols external to the MIMI working
+group.
 
-This document specifies a model where rooms are a virtual place where *users* send
-events. Events can be application messages or policy configuration, and are extensible
-in nature. The specific policy being used by a room is described during creation,
-and enforced within context of that room. Other layers, such as the encryption & security
-layer, may apply the policy further. For example, preventing a client from joining an
-MLS group if they are not a member of the accompanying room.
+As described by {{!I-D.barnes-mimi-arch}}, events are sent in rooms to accomplish state
+changes and messaging. This document defines how events become "accepted" into the room
+by enforcing policy, and how state events can configure the policy envelope for future
+enforcement.
 
-Rooms and the events they contain can be persisted in a wide variety of ways, such as
-within an MLS group itself through extensions. This document specifies abstract concepts
-independent of their persistence.
+This document describes an extensible approach to room policy, similar to how different
+encryption/security layers can be used within a room. The policy cannot change once set,
+though it can be configured using state events. This document describes some baseline
+policy aspects, but otherwise defers the majority of policy to other documents.
 
-Finally, this signaling layer is agnostic of transport. Its events can be re-framed for
-sending between servers without affecting signaling itself.
+A create state event is used to set the policy and encryption/security protocol. This
+create event is the very first event in the room - all other events are linearly placed
+after it.
+
+Abstract concepts are used for transport and persistence of rooms/events. For example,
+events can be persisted within an MLS group or serialized in a different format than
+described in this document.
 
 # Conventions and Definitions
 
 {::boilerplate bcp14-tagged}
 
-Terms from [I-D.barnes-mimi-arch TODO: Use a real link](https://bifurcation.github.io/mimi-arch/#go.draft-barnes-mimi-arch.html)
-and {{!I-D.ralston-mimi-terminology}} are used throughout this document.
+Terms from {{!I-D.barnes-mimi-arch}} and {{!I-D.ralston-mimi-terminology}} are used
+throughout this document. {{!I-D.barnes-mimi-arch}} takes precedence where there's conflict.
 
 # Room Model {#int-room-model}
 
