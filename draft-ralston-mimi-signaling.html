@@ -4,18 +4,20 @@
 <meta charset="utf-8">
 <meta content="Common,Latin" name="scripts">
 <meta content="initial-scale=1.0" name="viewport">
-<title>MIMI Signaling</title>
+<title>MIMI Signaling Protocol</title>
 <meta content="Travis Ralston" name="author">
 <meta content="Matthew Hodgson" name="author">
 <meta content="
-       The MIMI signaling layer is responsible for user-level interactions in the overall
-messaging stack. It is aware of encryption, and more specifically MLS, but does not
-have a dependency on any particular encryption or security layer. 
+       The MIMI signaling protocol is responsible for user-level interactions in the overall
+MIMI protocol stack. It implements a  membership control protocol  and methods for a
+ policy control protocol  to operate, as described by  . 
     " name="description">
 <meta content="xml2rfc 3.18.0" name="generator">
-<meta content="next generation" name="keyword">
-<meta content="unicorn" name="keyword">
-<meta content="sparkling distributed ledger" name="keyword">
+<meta content="mimi" name="keyword">
+<meta content="signaling" name="keyword">
+<meta content="protocol" name="keyword">
+<meta content="layer" name="keyword">
+<meta content="messaging" name="keyword">
 <meta content="draft-ralston-mimi-signaling-latest" name="ietf.draft">
 <!-- Generator version information:
   xml2rfc 3.18.0
@@ -1051,12 +1053,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <table class="ears">
 <thead><tr>
 <td class="left">Internet-Draft</td>
-<td class="center">MIMI Signaling</td>
+<td class="center">MIMI Signaling Protocol</td>
 <td class="right">August 2023</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Ralston &amp; Hodgson</td>
-<td class="center">Expires 2 March 2024</td>
+<td class="center">Expires 3 March 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1069,12 +1071,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ralston-mimi-signaling-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-08-30" class="published">30 August 2023</time>
+<time datetime="2023-08-31" class="published">31 August 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-03-02">2 March 2024</time></dd>
+<dd class="expires"><time datetime="2024-03-03">3 March 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1088,12 +1090,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </dd>
 </dl>
 </div>
-<h1 id="title">MIMI Signaling</h1>
+<h1 id="title">MIMI Signaling Protocol</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">The MIMI signaling layer is responsible for user-level interactions in the overall
-messaging stack. It is aware of encryption, and more specifically MLS, but does not
-have a dependency on any particular encryption or security layer.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">The MIMI signaling protocol is responsible for user-level interactions in the overall
+MIMI protocol stack. It implements a <em>membership control protocol</em> and methods for a
+<em>policy control protocol</em> to operate, as described by <span>[<a href="#I-D.barnes-mimi-arch" class="cite xref">I-D.barnes-mimi-arch</a>]</span>.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1130,7 +1132,7 @@ have a dependency on any particular encryption or security layer.<a href="#secti
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 2 March 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 3 March 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1233,28 +1235,32 @@ specifying a protocol to achieve interoperability among modern messaging provide
 Most providers do not currently support Messaging Layer Security (MLS) <span>[<a href="#RFC9420" class="cite xref">RFC9420</a>]</span>,
 a chartered requirement of MIMI, but do support other forms of encryption alongside
 their existing signaling.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">Signaling in the context of MIMI is the layer responsible for user-level operation of
-a chat, such as joining, parting, banning, etc. These user operations are validated
-through use of a defined policy envelope. The policy is enforced by the signaling
-layer, but described in another document <strong>TODO</strong>: Link to policy I-D.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3">An overview of the architecture for MIMI is described by <a href="https://bifurcation.github.io/mimi-arch/#go.draft-barnes-mimi-arch.html">I-D.barnes-mimi-arch TODO: Use a real link</a>.
-<strong>TODO</strong>: Ensure definitions of this doc and arch match<a href="#section-1-3" class="pilcrow">¶</a></p>
-<p id="section-1-4">The signaling layer described by this document deliberately does not concern itself
-with the specifics of the encryption/security layer placed next to it. This allows
-existing messaging providers to insert their own external-to-MIMI encryption layer
-for immediate interoperability while they transition onto MIMI's MLS layer <strong>TODO</strong>:
-Link to E2ES layer.<a href="#section-1-4" class="pilcrow">¶</a></p>
-<p id="section-1-5">This document specifies a model where rooms are a virtual place where <em>users</em> send
-events. Events can be application messages or policy configuration, and are extensible
-in nature. The specific policy being used by a room is described during creation,
-and enforced within context of that room. Other layers, such as the encryption &amp; security
-layer, may apply the policy further. For example, preventing a client from joining an
-MLS group if they are not a member of the accompanying room.<a href="#section-1-5" class="pilcrow">¶</a></p>
-<p id="section-1-6">Rooms and the events they contain can be persisted in a wide variety of ways, such as
-within an MLS group itself through extensions. This document specifies abstract concepts
-independent of their persistence.<a href="#section-1-6" class="pilcrow">¶</a></p>
-<p id="section-1-7">Finally, this signaling layer is agnostic of transport. Its events can be re-framed for
-sending between servers without affecting signaling itself.<a href="#section-1-7" class="pilcrow">¶</a></p>
+<p id="section-1-2">Within the MIMI stack of protocols, signaling is responsible for coordinating user-level
+actions and membership. This document describes such a protocol, encompassing a membership
+control protocol and a framework for a policy control protocol.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">An overview of the architecture, including the control protocols mentioned, is described
+by <span>[<a href="#I-D.barnes-mimi-arch" class="cite xref">I-D.barnes-mimi-arch</a>]</span>. A proposed policy control protocol running over this
+signaling protocol is described by <strong>TODO(TR): Policy draft</strong>.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">MIMI has a chartered requirement to use MLS in the encryption/security protocol, however
+most existing messaging providers do not currently use MLS in their encryption. This
+document describes an approach for enabling a given encryption/security protocol without
+concerning itself with the specifics of such a protocol. This allows existing messaging
+providers to insert their own encryption/security protocols external to the MIMI working
+group.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-5">As described by <span>[<a href="#I-D.barnes-mimi-arch" class="cite xref">I-D.barnes-mimi-arch</a>]</span>, events are sent in rooms to accomplish state
+changes and messaging. This document defines how events become "accepted" into the room
+by enforcing policy, and how state events can configure the policy envelope for future
+enforcement.<a href="#section-1-5" class="pilcrow">¶</a></p>
+<p id="section-1-6">This document describes an extensible approach to room policy, similar to how different
+encryption/security layers can be used within a room. The policy cannot change once set,
+though it can be configured using state events. This document describes some baseline
+policy aspects, but otherwise defers the majority of policy to other documents.<a href="#section-1-6" class="pilcrow">¶</a></p>
+<p id="section-1-7">A create state event is used to set the policy and encryption/security protocol. This
+create event is the very first event in the room - all other events are linearly placed
+after it.<a href="#section-1-7" class="pilcrow">¶</a></p>
+<p id="section-1-8">Abstract concepts are used for transport and persistence of rooms/events. For example,
+events can be persisted within an MLS group or serialized in a different format than
+described in this document.<a href="#section-1-8" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1266,8 +1272,8 @@ sending between servers without affecting signaling itself.<a href="#section-1-7
 "<span class="bcp14">MAY</span>", and "<span class="bcp14">OPTIONAL</span>" in this document are to be interpreted as
 described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when, and only when, they
 appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
-<p id="section-2-2">Terms from <a href="https://bifurcation.github.io/mimi-arch/#go.draft-barnes-mimi-arch.html">I-D.barnes-mimi-arch TODO: Use a real link</a>
-and <span>[<a href="#I-D.ralston-mimi-terminology" class="cite xref">I-D.ralston-mimi-terminology</a>]</span> are used throughout this document.<a href="#section-2-2" class="pilcrow">¶</a></p>
+<p id="section-2-2">Terms from <span>[<a href="#I-D.barnes-mimi-arch" class="cite xref">I-D.barnes-mimi-arch</a>]</span> and <span>[<a href="#I-D.ralston-mimi-terminology" class="cite xref">I-D.ralston-mimi-terminology</a>]</span> are used
+throughout this document. <span>[<a href="#I-D.barnes-mimi-arch" class="cite xref">I-D.barnes-mimi-arch</a>]</span> takes precedence where there's conflict.<a href="#section-2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="int-room-model">
@@ -1495,6 +1501,10 @@ Someone needs to keep a copy of each event somewhere though, otherwise the room 
 <a href="#section-10.1" class="section-number selfRef">10.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
+<dt id="I-D.barnes-mimi-arch">[I-D.barnes-mimi-arch]</dt>
+        <dd>
+<span class="refAuthor">Barnes, R.</span>, <span class="refTitle">"An Architecture for More Instant Messaging Interoperability (MIMI)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-barnes-mimi-arch-00</span>, <time datetime="2023-08-29" class="refDate">29 August 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-barnes-mimi-arch-00">https://datatracker.ietf.org/doc/html/draft-barnes-mimi-arch-00</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="I-D.ralston-mimi-terminology">[I-D.ralston-mimi-terminology]</dt>
         <dd>
 <span class="refAuthor">Ralston, T.</span>, <span class="refTitle">"MIMI Terminology"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ralston-mimi-terminology-02</span>, <time datetime="2023-07-10" class="refDate">10 July 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ralston-mimi-terminology-02">https://datatracker.ietf.org/doc/html/draft-ralston-mimi-terminology-02</a>&gt;</span>. </dd>
