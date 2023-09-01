@@ -105,7 +105,7 @@ characters) removed.
 
 *URL-Safe Base64*: As described by {{Section 5 of RFC4648}}. May also be unpadded, as above.
 
-*Redaction*: An algorithm to remove fields irrelevant to the signaling protocol's operation.
+*Redaction*: An algorithm to remove fields irrelevant to the overall protocol's operation.
 This should not be confused with message deletion/removal, where a user wishes to delete
 content they previously sent in the room. Redaction is reserved for protocol operation
 exclusively. See {{int-redactions}}.
