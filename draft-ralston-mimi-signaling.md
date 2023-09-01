@@ -144,7 +144,7 @@ In diagram form, a room looks as such:
 | m.room.create |<--| m.room.member |<--| m.room.encrypted |
 +---------------+   +---------------+   +------------------+
        ^                    ^                     |
-       +--------------------+---------------------+
+       +--------------------+-----auth events-----+
 ~~~
 {: #overview title="A room made up of events." }
 
