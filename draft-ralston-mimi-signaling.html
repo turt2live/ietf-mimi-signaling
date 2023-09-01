@@ -1054,11 +1054,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">MIMI Signaling Protocol</td>
-<td class="right">August 2023</td>
+<td class="right">September 2023</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Ralston &amp; Hodgson</td>
-<td class="center">Expires 3 March 2024</td>
+<td class="center">Expires 4 March 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1071,12 +1071,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ralston-mimi-signaling-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-08-31" class="published">31 August 2023</time>
+<time datetime="2023-09-01" class="published">1 September 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-03-03">3 March 2024</time></dd>
+<dd class="expires"><time datetime="2024-03-04">4 March 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1132,7 +1132,7 @@ MIMI protocol stack. It implements a <em>membership control protocol</em> and me
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 3 March 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 4 March 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1168,58 +1168,59 @@ MIMI protocol stack. It implements a <em>membership control protocol</em> and me
             <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-conventions-and-definitions" class="internal xref">Conventions and Definitions</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
-            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-room-model" class="internal xref">Room Model</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
-                <p id="section-toc.1-1.3.2.1.1" class="keepWithNext"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-room-history" class="internal xref">Room History</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
-                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-user-and-server-participati" class="internal xref">User and Server Participation</a></p>
-</li>
-            </ul>
+            <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-room-structure" class="internal xref">Room Structure</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
-            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-user-model" class="internal xref">User Model</a></p>
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-events" class="internal xref">Events</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
+                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-reference-hash" class="internal xref">Reference Hash</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2">
+                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="auto internal xref">4.2</a>.  <a href="#name-content-hash" class="internal xref">Content Hash</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.3">
+                <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="auto internal xref">4.3</a>.  <a href="#name-redaction" class="internal xref">Redaction</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.4">
+                <p id="section-toc.1-1.4.2.4.1"><a href="#section-4.4" class="auto internal xref">4.4</a>.  <a href="#name-state-events" class="internal xref">State Events</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.5">
+                <p id="section-toc.1-1.4.2.5.1"><a href="#section-4.5" class="auto internal xref">4.5</a>.  <a href="#name-mroomcreate" class="internal xref"><code>m.room.create</code></a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.6">
+                <p id="section-toc.1-1.4.2.6.1"><a href="#section-4.6" class="auto internal xref">4.6</a>.  <a href="#name-mroommember" class="internal xref"><code>m.room.member</code></a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
-            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-auth-events" class="internal xref">Auth Events</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
-                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-mroomcreate" class="internal xref"><code>m.room.create</code></a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
-                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-mroomuser" class="internal xref"><code>m.room.user</code></a></p>
-</li>
-            </ul>
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-history-model" class="internal xref">History Model</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
-            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-history-model" class="internal xref">History Model</a></p>
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-todotr-sections" class="internal xref">TODO(TR): Sections</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
-            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-todo-sections" class="internal xref">[TODO: Sections]</a></p>
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
-            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
-            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
-            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-references" class="internal xref">References</a></p>
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-references" class="internal xref">References</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.1">
-                <p id="section-toc.1-1.10.2.1.1"><a href="#section-10.1" class="auto internal xref">10.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1">
+                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="auto internal xref">9.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.2">
-                <p id="section-toc.1-1.10.2.2.1"><a href="#section-10.2" class="auto internal xref">10.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.2">
+                <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="auto internal xref">9.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
 </li>
             </ul>
 </li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
-            <p id="section-toc.1-1.11.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
 </li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
-            <p id="section-toc.1-1.12.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
+            <p id="section-toc.1-1.11.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -1274,231 +1275,263 @@ described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</s
 appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
 <p id="section-2-2">Terms from <span>[<a href="#I-D.barnes-mimi-arch" class="cite xref">I-D.barnes-mimi-arch</a>]</span> and <span>[<a href="#I-D.ralston-mimi-terminology" class="cite xref">I-D.ralston-mimi-terminology</a>]</span> are used
 throughout this document. <span>[<a href="#I-D.barnes-mimi-arch" class="cite xref">I-D.barnes-mimi-arch</a>]</span> takes precedence where there's conflict.<a href="#section-2-2" class="pilcrow">¶</a></p>
+<p id="section-2-3">Other terms include:<a href="#section-2-3" class="pilcrow">¶</a></p>
+<p id="section-2-4"><em>Unpadded Base64</em>: Serialization as described by <span><a href="https://rfc-editor.org/rfc/rfc4648#section-4" class="relref">Section 4</a> of [<a href="#RFC4648" class="cite xref">RFC4648</a>]</span> with padding (<code>=</code>
+characters) removed.<a href="#section-2-4" class="pilcrow">¶</a></p>
+<p id="section-2-5"><em>URL-Safe Base64</em>: As described by <span><a href="https://rfc-editor.org/rfc/rfc4648#section-5" class="relref">Section 5</a> of [<a href="#RFC4648" class="cite xref">RFC4648</a>]</span>. May also be unpadded, as above.<a href="#section-2-5" class="pilcrow">¶</a></p>
+<p id="section-2-6"><em>Redaction</em>: An algorithm to remove fields irrelevant to the signaling protocol's operation.
+This should not be confused with message deletion/removal, where a user wishes to delete
+content they previously sent in the room. Redaction is reserved for protocol operation
+exclusively. See <a href="#int-redactions" class="auto internal xref">Section 4.3</a>.<a href="#section-2-6" class="pilcrow">¶</a></p>
+<p id="section-2-7"><em>Content Hash</em>: A SHA256 <span>[<a href="#RFC6234" class="cite xref">RFC6234</a>]</span> hash covering the unredacted event. See <a href="#int-content-hash" class="auto internal xref">Section 4.2</a>.<a href="#section-2-7" class="pilcrow">¶</a></p>
+<p id="section-2-8"><em>Reference Hash</em>: A SHA256 <span>[<a href="#RFC6234" class="cite xref">RFC6234</a>]</span> hash covering the essential fields of an event,
+including the content hash. See <a href="#int-reference-hash" class="auto internal xref">Section 4.1</a>.<a href="#section-2-8" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="int-room-model">
+<div id="room-structure">
 <section id="section-3">
-      <h2 id="name-room-model">
-<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-room-model" class="section-name selfRef">Room Model</a>
+      <h2 id="name-room-structure">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-room-structure" class="section-name selfRef">Room Structure</a>
       </h2>
-<p id="section-3-1"><strong>TODO</strong>: Check for overlap with arch<a href="#section-3-1" class="pilcrow">¶</a></p>
-<p id="section-3-2">A room is a conceptual place where events are sent among users. These events carry information
-such as the new policy configuration, application messages, and other room state information
-as needed. Receiving events is left as a responsibility for the transport.<a href="#section-3-2" class="pilcrow">¶</a></p>
-<p id="section-3-3">Rooms have two primary event definitions:<a href="#section-3-3" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-3-4.1">
-          <strong>State events</strong>, containing metadata and policy configuration.<a href="#section-3-4.1" class="pilcrow">¶</a>
-</li>
-        <li class="normal" id="section-3-4.2">
-          <strong>Message events</strong>, containing application-specific data. For example, encrypted conversation
-activity.<a href="#section-3-4.2" class="pilcrow">¶</a>
-</li>
-      </ul>
-<p id="section-3-5">Events reference the event preceeding themselves linearly. The hub server is expected to enforce
-this linear relationship, and therefore events have two representations. Events not yet processed
-by a hub server are known as "limited events", and are lacking authorization and ordering information.
-They are not sent until they become "fully-formed events" by a hub server, where the missing
-auth and ordering fields are added. A hub server <span class="bcp14">MUST</span> only emit fully-formed events over its
-transport, though it does <em>receive</em> limited events from other follower servers.<a href="#section-3-5" class="pilcrow">¶</a></p>
-<p id="section-3-6">Throughout this document, the word "event" means "fully-formed event" unless otherwise qualified
-as a "limited event". This implies that the event has been accepted by the hub into the room.<a href="#section-3-6" class="pilcrow">¶</a></p>
-<p id="section-3-7">Each room has exactly one set of policies it follows. Once the policy is set, it cannot have
-rules added or removed. The policy can only be configured using state events. The ability to send
-any particular event is determined by policy. If a room wishes to use a new set of policies, it
-must replace itself using a new room identifier.<a href="#section-3-7" class="pilcrow">¶</a></p>
-<p id="section-3-8">The state events which affect how the policy operates are known as "auth events". Message events
-can never be an auth event. Both message and state events reference the auth events which permit
-it to be sent to the room, authorizing its existence in that room. The "auth chain" for an event
-is the recursive collection of auth events. That is, the auth events for the event and the auth
-events of those events and so on.<a href="#section-3-8" class="pilcrow">¶</a></p>
-<p id="section-3-9">The first event in the room is the "create event". This event defines the specific set of policies
-the room is using. The create event <span class="bcp14">MUST NOT</span> have any preceeding events, and <span class="bcp14">MUST</span> be an auth event
-for all future events. The create event additionally specifies the specific encryption algorithm
-and configuration for the room, enabling the room's choice of encryption &amp; security layers. For
-MIMI, this is expected to be the algorithm specified by <strong>TODO</strong>: Link to E2ES I-D.<a href="#section-3-9" class="pilcrow">¶</a></p>
-<p id="section-3-10">The create event is described in more detail in <a href="#int-ev-create" class="auto internal xref">Section 5.1</a>.<a href="#section-3-10" class="pilcrow">¶</a></p>
-<p id="section-3-11">Rooms are identified under the creating server's domain, creating a namespace. Room IDs are not
-intended to be parsed or human readable. The unique portion of the room ID, the localpart, is
-deliberately an implementation detail. Servers can use any pattern they wish for localparts, so
-long as the resulting room ID hasn't been used before.<a href="#section-3-11" class="pilcrow">¶</a></p>
-<p id="section-3-12">The server name in the room ID is only used to validate the create event and declare the initial
-hub server in the room. Otherwise, the server name serves no purpose. The server might not even
-be participating in the room anymore.<a href="#section-3-12" class="pilcrow">¶</a></p>
-<p id="section-3-13">The ABNF <span>[<a href="#RFC5234" class="cite xref">RFC5234</a>]</span> grammar for a room ID is:<a href="#section-3-13" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3-14">
-<pre>
-room_id = "!" room_id_localpart ":" server_name
-room_id_localpart = 1*opaque
-opaque = DIGIT / ALPHA / "-" / "." / "~" / "_"
-</pre><a href="#section-3-14" class="pilcrow">¶</a>
-</div>
-<p id="section-3-15"><code>server_name</code> is as described by <a href="https://bifurcation.github.io/mimi-arch/#go.draft-barnes-mimi-arch.html">I-D.barnes-mimi-arch TODO: Use a real link</a>.<a href="#section-3-15" class="pilcrow">¶</a></p>
-<p id="section-3-16">Room IDs <span class="bcp14">MUST</span> be case sensitive and <span class="bcp14">MUST NOT</span> exceed 255 characters.<a href="#section-3-16" class="pilcrow">¶</a></p>
-<p id="section-3-17">Example: <code>!cEXuEjziVcCzbxbqmN:example.org</code><a href="#section-3-17" class="pilcrow">¶</a></p>
-<div id="room-history">
-<section id="section-3.1">
-        <h3 id="name-room-history">
-<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-room-history" class="section-name selfRef">Room History</a>
-        </h3>
-<p id="section-3.1-1">Consider the following series of events:<a href="#section-3.1-1" class="pilcrow">¶</a></p>
-<span id="name-a-four-event-room"></span><div id="overview">
+<p id="section-3-1">Rooms consist of an identifier and linear linked-list of events. The first event <span class="bcp14">MUST</span> be
+a create event (<a href="#int-ev-create" class="auto internal xref">Section 4.5</a>) to establish the policy and encryption/security protocol
+the room uses. The second event <span class="bcp14">MUST</span> be the user membership event (<a href="#int-ev-member" class="auto internal xref">Section 4.6</a>) for
+the creator. All other events follow, and are sequenced into the linked-list by the hub server.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-2">The linked-list represents the set of accepted events in the room. Rejected or illegal events
+are excluded. The hub server <span class="bcp14">MUST</span> enforce the room's policy upon the room. Follower servers
+<span class="bcp14">SHOULD</span> additionally enforce the policy, preventing the hub from accepting illegal events.<a href="#section-3-2" class="pilcrow">¶</a></p>
+<p id="section-3-3">Events point to their parent event, as sequenced by the hub, and the policy-configuring state
+events which prove the event is allowed in the room (the event's "auth events"). The create
+event <span class="bcp14">MUST</span> be included in the auth events, unless the event is the create event itself. Other
+examples of auth events include the sender's membership event and current permissions event.<a href="#section-3-3" class="pilcrow">¶</a></p>
+<p id="section-3-4">This structure allows a server to discard events it no longer needs, but can easily be found
+later. For example, a follower server might only persist the create event and a dozen most
+recent events. If the server then has a need to "backfill" then it can simply use the <code>prevEvent</code>
+pointer off the oldest (non-create) event it has until eventually hitting the intended mark
+or create event.<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-3-5">In diagram form, a room looks as such:<a href="#section-3-5" class="pilcrow">¶</a></p>
+<span id="name-a-room-made-up-of-events"></span><div id="overview">
 <figure id="figure-1">
-          <div id="section-3.1-2.1">
-            <div class="alignLeft art-svg artwork" id="section-3.1-2.1.1">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="48" width="160" viewBox="0 0 160 48" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
-                <path d="M 24,32 L 40,32" fill="none" stroke="black"></path>
-                <path d="M 72,32 L 88,32" fill="none" stroke="black"></path>
-                <path d="M 120,32 L 136,32" fill="none" stroke="black"></path>
-                <polygon class="arrowhead" points="128,32 116,26.4 116,37.6" fill="black" transform="rotate(180,120,32)"></polygon>
-                <polygon class="arrowhead" points="80,32 68,26.4 68,37.6" fill="black" transform="rotate(180,72,32)"></polygon>
-                <polygon class="arrowhead" points="32,32 20,26.4 20,37.6" fill="black" transform="rotate(180,24,32)"></polygon>
-                <g class="text">
-                  <text x="8" y="36">A</text>
-                  <text x="56" y="36">B</text>
-                  <text x="104" y="36">C</text>
-                  <text x="152" y="36">D</text>
-                </g>
-              </svg><a href="#section-3.1-2.1.1" class="pilcrow">¶</a>
+        <div id="section-3-6.1">
+          <div class="alignLeft art-svg artwork" id="section-3-6.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="112" width="488" viewBox="0 0 488 112" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+              <path d="M 8,32 L 8,64" fill="none" stroke="black"></path>
+              <path d="M 64,72 L 64,96" fill="none" stroke="black"></path>
+              <path d="M 136,32 L 136,64" fill="none" stroke="black"></path>
+              <path d="M 168,32 L 168,64" fill="none" stroke="black"></path>
+              <path d="M 232,72 L 232,96" fill="none" stroke="black"></path>
+              <path d="M 296,32 L 296,64" fill="none" stroke="black"></path>
+              <path d="M 328,32 L 328,64" fill="none" stroke="black"></path>
+              <path d="M 408,72 L 408,96" fill="none" stroke="black"></path>
+              <path d="M 480,32 L 480,64" fill="none" stroke="black"></path>
+              <path d="M 8,32 L 136,32" fill="none" stroke="black"></path>
+              <path d="M 168,32 L 296,32" fill="none" stroke="black"></path>
+              <path d="M 328,32 L 480,32" fill="none" stroke="black"></path>
+              <path d="M 144,48 L 160,48" fill="none" stroke="black"></path>
+              <path d="M 304,48 L 320,48" fill="none" stroke="black"></path>
+              <path d="M 8,64 L 136,64" fill="none" stroke="black"></path>
+              <path d="M 168,64 L 296,64" fill="none" stroke="black"></path>
+              <path d="M 328,64 L 480,64" fill="none" stroke="black"></path>
+              <path d="M 64,96 L 408,96" fill="none" stroke="black"></path>
+              <polygon class="arrowhead" points="312,48 300,42.4 300,53.6" fill="black" transform="rotate(180,304,48)"></polygon>
+              <polygon class="arrowhead" points="240,72 228,66.4 228,77.6" fill="black" transform="rotate(270,232,72)"></polygon>
+              <polygon class="arrowhead" points="152,48 140,42.4 140,53.6" fill="black" transform="rotate(180,144,48)"></polygon>
+              <polygon class="arrowhead" points="72,72 60,66.4 60,77.6" fill="black" transform="rotate(270,64,72)"></polygon>
+              <g class="text">
+                <text x="72" y="52">m.room.create</text>
+                <text x="232" y="52">m.room.member</text>
+                <text x="404" y="52">m.room.encrypted</text>
+              </g>
+            </svg><a href="#section-3-6.1.1" class="pilcrow">¶</a>
 </div>
 </div>
 <figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
-<a href="#name-a-four-event-room" class="selfRef">A four event room.</a>
-          </figcaption></figure>
+<a href="#name-a-room-made-up-of-events" class="selfRef">A room made up of events.</a>
+        </figcaption></figure>
 </div>
-<p id="section-3.1-3">The first event, A, is the create event (<a href="#int-ev-create" class="auto internal xref">Section 5.1</a>) for the room. B is the creator's
-join event (<a href="#int-ev-user" class="auto internal xref">Section 5.2</a>), C could be an encrypted "hello world" text message, and D an
-invite (<a href="#int-ev-user" class="auto internal xref">Section 5.2</a>) for another user. Collectively, this linear set of events creates
-the history for the room.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
-<p id="section-3.1-4"><strong>TODO</strong>: Does history visibility go here?<a href="#section-3.1-4" class="pilcrow">¶</a></p>
+<p id="section-3-7">The <code>m.room.encrypted</code> event (not specified in this document) has the <code>m.room.member</code> event
+as its only previous event, but points at both the <code>m.room.member</code> and <code>m.room.create</code> events
+as auth events. In practice, a room would likely have more <code>m.room.member</code> events to represent
+other users in the room, rather than this example user conversing with themselves.<a href="#section-3-7" class="pilcrow">¶</a></p>
+<p id="section-3-8"><strong>TODO(TR): Should we replace room IDs with the create event's ID?</strong><a href="#section-3-8" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="user-and-server-participation">
-<section id="section-3.2">
-        <h3 id="name-user-and-server-participati">
-<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-user-and-server-participati" class="section-name selfRef">User and Server Participation</a>
-        </h3>
-<p id="section-3.2-1"><strong>TODO</strong>: This?<a href="#section-3.2-1" class="pilcrow">¶</a></p>
-</section>
-</div>
-</section>
-</div>
-<div id="user-model">
+<div id="int-events">
 <section id="section-4">
-      <h2 id="name-user-model">
-<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-user-model" class="section-name selfRef">User Model</a>
+      <h2 id="name-events">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-events" class="section-name selfRef">Events</a>
       </h2>
-<p id="section-4-1">Users belong to a server, and are represented by a user ID. Each user ID has a <strong>localpart</strong>
-and references the server which is responsible for that user.<a href="#section-4-1" class="pilcrow">¶</a></p>
-<p id="section-4-2">The ABNF <span>[<a href="#RFC5234" class="cite xref">RFC5234</a>]</span> grammar for a user ID is:<a href="#section-4-2" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-4-3">
+<p id="section-4-1">The concept of events is described by Section 5.1 of <span>[<a href="#I-D.barnes-mimi-arch" class="cite xref">I-D.barnes-mimi-arch</a>]</span>. An event is
+authenticated against its TLS presentation language format (<span><a href="https://rfc-editor.org/rfc/rfc8446#section-3" class="relref">Section 3</a> of [<a href="#RFC8446" class="cite xref">RFC8446</a>]</span>):<a href="#section-4-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4-2">
 <pre>
-user_id = "@" user_id_localpart ":" server_name
-user_id_localpart = 1*user_id_char
-user_id_char = DIGIT
-             / %x61-7A                   ; a-z
-             / "-" / "." / "="
-             / "_" / "/" / "+"
-</pre><a href="#section-4-3" class="pilcrow">¶</a>
+// Consists of a server's signatures using their signing key. The transport
+// specification defines which specific signing key algorithm is used. This
+// document describes *what* a signature covers.
+opaque Signatures;
+struct {
+  opaque roomId;               // where the event is sent to
+  opaque type;                 // the type of event. Defines format for content
+  opaque [[stateKey]];         // if present, the event is a state event
+  opaque sender;               // who or what sent this event
+  opaque content;              // binary event content (TODO(TR): type??)
+  opaque authEvents[];         // the event IDs of the auth events
+  opaque prevEvent;            // the parent event ID
+  uint8 originContentHash[32]; // the origin server's content hash of the event
+  Signatures hubSignature;
+  Signatures originSignature;
+} Event;
+</pre><a href="#section-4-2" class="pilcrow">¶</a>
 </div>
-<p id="section-4-4">Like room IDs, <code>server_name</code> is assumed to be compliant with <span><a href="https://rfc-editor.org/rfc/rfc1123#section-2.1" class="relref">Section 2.1</a> of [<a href="#RFC1123" class="cite xref">RFC1123</a>]</span>.<a href="#section-4-4" class="pilcrow">¶</a></p>
-<p id="section-4-5">Room IDs <span class="bcp14">MUST</span> be case sensitive and <span class="bcp14">MUST NOT</span> exceed 255 characters.<a href="#section-4-5" class="pilcrow">¶</a></p>
-<p id="section-4-6">Example: <code>@watch/for/slashes:example.org</code><a href="#section-4-6" class="pilcrow">¶</a></p>
-<p id="section-4-7"><strong>TODO</strong>: Describe how pseudo IDs work<a href="#section-4-7" class="pilcrow">¶</a></p>
+<p id="section-4-3"><strong>TODO(TR): Should we bring over origin_server_ts?</strong><a href="#section-4-3" class="pilcrow">¶</a></p>
+<p id="section-4-4"><strong>TODO(TR): Maximum lengths? (or is this a transport problem?)</strong><a href="#section-4-4" class="pilcrow">¶</a></p>
+<p id="section-4-5">Note that an "event ID" is not specified on the object. The event ID for an event is the
+sigil <code>$</code> followed by the URL-Safe Unpadded Base64-encoded reference hash (<a href="#int-reference-hash" class="auto internal xref">Section 4.1</a>)
+of the event.<a href="#section-4-5" class="pilcrow">¶</a></p>
+<p id="section-4-6">The "origin server" of an event is the server denoted/implied by the <code>sender</code>.<a href="#section-4-6" class="pilcrow">¶</a></p>
+<div id="int-reference-hash">
+<section id="section-4.1">
+        <h3 id="name-reference-hash">
+<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-reference-hash" class="section-name selfRef">Reference Hash</a>
+        </h3>
+<p id="section-4.1-1">Events are referenced by ID in relation to each other, forming the room history and auth
+chain. If the event ID was a sender-generated value, any server along the send or receive
+path could "replace" that event with another perfectly legal event, both using the same ID.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.1-2">By using a calculated value, namely the reference hash, if a server does try to replace the
+event then it would result in a completely different event ID. That event ID becomes impossible
+to reference as it wouldn't be part of the proper room history.<a href="#section-4.1-2" class="pilcrow">¶</a></p>
+<p id="section-4.1-3"><strong>TODO(TR): There might be a bug in here. Even with a reference hash, the malicious event
+is only made illegal upon discovery of a later event. This means we end up having to evict
+an event or two, which breaks append-only semantics.</strong><a href="#section-4.1-3" class="pilcrow">¶</a></p>
+<p id="section-4.1-4">To calculate a reference hash, the event is first redacted (<a href="#int-redactions" class="auto internal xref">Section 4.3</a>) alongside
+<code>hubSignature</code> and <code>originSignature</code> fields being removed. The resulting binary is then
+hashed using SHA256 <span>[<a href="#RFC6234" class="cite xref">RFC6234</a>]</span>.<a href="#section-4.1-4" class="pilcrow">¶</a></p>
+<p id="section-4.1-5">To further create an event ID, the resulting hash is encoded using URL-Safe Unpadded Base64
+and prefixed with the <code>$</code> sigil.<a href="#section-4.1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="auth-events">
-<section id="section-5">
-      <h2 id="name-auth-events">
-<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-auth-events" class="section-name selfRef">Auth Events</a>
-      </h2>
-<p id="section-5-1">Mentioned in <a href="#int-room-model" class="auto internal xref">Section 3</a>, auth events are the state events which configure the policy
-for the room. By name, they are:<a href="#section-5-1" class="pilcrow">¶</a></p>
+<div id="int-content-hash">
+<section id="section-4.2">
+        <h3 id="name-content-hash">
+<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-content-hash" class="section-name selfRef">Content Hash</a>
+        </h3>
+<p id="section-4.2-1">An event's content hash prevents servers from modifying details of the event not covered
+by the reference hash itself. For example, a room name state event doesn't have the name
+itself covered by a reference hash because it's redacted, so it's instead covered by the
+content hash, which is in turn covered by the reference hash. This allows the event to
+later be redacted without affecting the event ID of that event.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.2-2">To calculate a content hash, the following fields are removed from the event first:<a href="#section-4.2-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5-2.1">Membership events<a href="#section-5-2.1" class="pilcrow">¶</a>
+<li class="normal" id="section-4.2-3.1">
+            <code>originContentHash</code><a href="#section-4.2-3.1" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-5-2.2">Role events<a href="#section-5-2.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-4.2-3.2">
+            <code>hubSignature</code><a href="#section-4.2-3.2" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-5-2.3">The join rules event<a href="#section-5-2.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-4.2-3.3">
+            <code>originSignature</code><a href="#section-4.2-3.3" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-5-2.4">The create event<a href="#section-5-2.4" class="pilcrow">¶</a>
+          <li class="normal" id="section-4.2-3.4">
+            <code>prevEvent</code><a href="#section-4.2-3.4" class="pilcrow">¶</a>
 </li>
-      </ul>
-<p id="section-5-3"><strong>TODO</strong>: The rest of this. Describe auth chain in more detail.<a href="#section-5-3" class="pilcrow">¶</a></p>
-<div id="int-ev-create">
-<section id="section-5.1">
-        <h3 id="name-mroomcreate">
-<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-mroomcreate" class="section-name selfRef"><code>m.room.create</code></a>
-        </h3>
-<p id="section-5.1-1"><strong>TODO</strong>: This.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-4.2-3.5">
+            <code>authEvents</code><a href="#section-4.2-3.5" class="pilcrow">¶</a>
+</li>
+        </ul>
+<p id="section-4.2-4"><code>authEvents</code> and <code>prevEvent</code> are removed because they are populated by the hub server. The
+content hash is to preserve the origin server's event, not the hub server's.<a href="#section-4.2-4" class="pilcrow">¶</a></p>
+<p id="section-4.2-5">The resulting binary is then hashed using SHA256 <span>[<a href="#RFC6234" class="cite xref">RFC6234</a>]</span>.<a href="#section-4.2-5" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="int-ev-user">
-<section id="section-5.2">
-        <h3 id="name-mroomuser">
-<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-mroomuser" class="section-name selfRef"><code>m.room.user</code></a>
+<div id="int-redactions">
+<section id="section-4.3">
+        <h3 id="name-redaction">
+<a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-redaction" class="section-name selfRef">Redaction</a>
         </h3>
-<p id="section-5.2-1"><strong>TODO</strong>: This.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.3-1">The process of removing fields from an event which aren't important for the overall protocol
+to operate is known as "redaction". This document protects fields of events required for
+signaling to work while a policy document or encryption/security protocol will define their
+own fields. For example, the MLS ciphertext for a proposal or commit might be preserved through
+redaction to avoid breaking the MLS group for future participants.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
+<p id="section-4.3-2">The default behaviour for any event type is to remove all fields <em>not</em> specified by <a href="#int-events" class="auto internal xref">Section 4</a>
+plus <code>content</code>. Individual event types <span class="bcp14">MAY</span> specify their own redaction behaviour for <code>content</code>.<a href="#section-4.3-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="state-events">
+<section id="section-4.4">
+        <h3 id="name-state-events">
+<a href="#section-4.4" class="section-number selfRef">4.4. </a><a href="#name-state-events" class="section-name selfRef">State Events</a>
+        </h3>
+<p id="section-4.4-1"><strong>TODO</strong>: This. What are they?<a href="#section-4.4-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="int-ev-create">
+<section id="section-4.5">
+        <h3 id="name-mroomcreate">
+<a href="#section-4.5" class="section-number selfRef">4.5. </a><a href="#name-mroomcreate" class="section-name selfRef"><code>m.room.create</code></a>
+        </h3>
+<p id="section-4.5-1"><strong>TODO</strong>: This.<a href="#section-4.5-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="int-ev-member">
+<section id="section-4.6">
+        <h3 id="name-mroommember">
+<a href="#section-4.6" class="section-number selfRef">4.6. </a><a href="#name-mroommember" class="section-name selfRef"><code>m.room.member</code></a>
+        </h3>
+<p id="section-4.6-1"><strong>TODO</strong>: This.<a href="#section-4.6-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
 <div id="history-model">
-<section id="section-6">
+<section id="section-5">
       <h2 id="name-history-model">
-<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-history-model" class="section-name selfRef">History Model</a>
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-history-model" class="section-name selfRef">History Model</a>
       </h2>
-<p id="section-6-1"><strong>TODO</strong>: This. Short version is servers only need the auth chain for all current members of
+<p id="section-5-1"><strong>TODO</strong>: This. Short version is servers only need the auth chain for all current members of
 the room upon joining (we can discard people who joined and already left, and old message events).
-Someone needs to keep a copy of each event somewhere though, otherwise the room breaks.<a href="#section-6-1" class="pilcrow">¶</a></p>
+Someone needs to keep a copy of each event somewhere though, otherwise the room breaks.<a href="#section-5-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="todo-sections">
-<section id="section-7">
-      <h2 id="name-todo-sections">
-<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-todo-sections" class="section-name selfRef">[TODO: Sections]</a>
+<div id="todotr-sections">
+<section id="section-6">
+      <h2 id="name-todotr-sections">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-todotr-sections" class="section-name selfRef">TODO(TR): Sections</a>
       </h2>
 <ul class="normal">
-<li class="normal" id="section-7-1.1">
-          <p id="section-7-1.1.1">Event schema/shape. Do not require JSON, through signing might need a canonical format.<a href="#section-7-1.1.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-7-1.1.2.1">Including hashes and event ID behaviours<a href="#section-7-1.1.2.1" class="pilcrow">¶</a>
+<li class="normal" id="section-6-1.1">Join, leave, etc operations overview.<a href="#section-6-1.1" class="pilcrow">¶</a>
 </li>
-          </ul>
+        <li class="normal" id="section-6-1.2">
+          <code>[User -&gt;] Follower -&gt; Hub</code> send path.<a href="#section-6-1.2" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-7-1.2">Join, leave, etc operations overview.<a href="#section-7-1.2" class="pilcrow">¶</a>
-</li>
-        <li class="normal" id="section-7-1.3">
-          <code>[User -&gt;] Follower -&gt; Hub</code> send path.<a href="#section-7-1.3" class="pilcrow">¶</a>
-</li>
-        <li class="normal" id="section-7-1.4">Actual examples of an event?<a href="#section-7-1.4" class="pilcrow">¶</a>
+        <li class="normal" id="section-6-1.3">Actual examples of an event?<a href="#section-6-1.3" class="pilcrow">¶</a>
 </li>
       </ul>
 </section>
 </div>
 <div id="security-considerations">
-<section id="section-8">
+<section id="section-7">
       <h2 id="name-security-considerations">
-<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-8-1"><strong>TODO</strong>: This<a href="#section-8-1" class="pilcrow">¶</a></p>
+<p id="section-7-1"><strong>TODO</strong>: This<a href="#section-7-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-considerations">
-<section id="section-9">
+<section id="section-8">
       <h2 id="name-iana-considerations">
-<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<p id="section-9-1">This document has no IANA actions.<a href="#section-9-1" class="pilcrow">¶</a></p>
+<p id="section-8-1">This document has no IANA actions.<a href="#section-8-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<section id="section-10">
+<section id="section-9">
       <h2 id="name-references">
-<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-references" class="section-name selfRef">References</a>
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-references" class="section-name selfRef">References</a>
       </h2>
-<section id="section-10.1">
+<section id="section-9.1">
         <h3 id="name-normative-references">
-<a href="#section-10.1" class="section-number selfRef">10.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
 <dt id="I-D.barnes-mimi-arch">[I-D.barnes-mimi-arch]</dt>
@@ -1513,9 +1546,13 @@ Someone needs to keep a copy of each event somewhere though, otherwise the room 
         <dd>
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC5234">[RFC5234]</dt>
+<dt id="RFC4648">[RFC4648]</dt>
         <dd>
-<span class="refAuthor">Crocker, D., Ed.</span> and <span class="refAuthor">P. Overell</span>, <span class="refTitle">"Augmented BNF for Syntax Specifications: ABNF"</span>, <span class="seriesInfo">STD 68</span>, <span class="seriesInfo">RFC 5234</span>, <span class="seriesInfo">DOI 10.17487/RFC5234</span>, <time datetime="2008-01" class="refDate">January 2008</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5234">https://www.rfc-editor.org/rfc/rfc5234</a>&gt;</span>. </dd>
+<span class="refAuthor">Josefsson, S.</span>, <span class="refTitle">"The Base16, Base32, and Base64 Data Encodings"</span>, <span class="seriesInfo">RFC 4648</span>, <span class="seriesInfo">DOI 10.17487/RFC4648</span>, <time datetime="2006-10" class="refDate">October 2006</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4648">https://www.rfc-editor.org/rfc/rfc4648</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC6234">[RFC6234]</dt>
+        <dd>
+<span class="refAuthor">Eastlake 3rd, D.</span> and <span class="refAuthor">T. Hansen</span>, <span class="refTitle">"US Secure Hash Algorithms (SHA and SHA-based HMAC and HKDF)"</span>, <span class="seriesInfo">RFC 6234</span>, <span class="seriesInfo">DOI 10.17487/RFC6234</span>, <time datetime="2011-05" class="refDate">May 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6234">https://www.rfc-editor.org/rfc/rfc6234</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8174">[RFC8174]</dt>
       <dd>
@@ -1523,14 +1560,14 @@ Someone needs to keep a copy of each event somewhere though, otherwise the room 
 <dd class="break"></dd>
 </dl>
 </section>
-<section id="section-10.2">
+<section id="section-9.2">
         <h3 id="name-informative-references">
-<a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+<a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
-<dt id="RFC1123">[RFC1123]</dt>
+<dt id="RFC8446">[RFC8446]</dt>
         <dd>
-<span class="refAuthor">Braden, R., Ed.</span>, <span class="refTitle">"Requirements for Internet Hosts - Application and Support"</span>, <span class="seriesInfo">STD 3</span>, <span class="seriesInfo">RFC 1123</span>, <span class="seriesInfo">DOI 10.17487/RFC1123</span>, <time datetime="1989-10" class="refDate">October 1989</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc1123">https://www.rfc-editor.org/rfc/rfc1123</a>&gt;</span>. </dd>
+<span class="refAuthor">Rescorla, E.</span>, <span class="refTitle">"The Transport Layer Security (TLS) Protocol Version 1.3"</span>, <span class="seriesInfo">RFC 8446</span>, <span class="seriesInfo">DOI 10.17487/RFC8446</span>, <time datetime="2018-08" class="refDate">August 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8446">https://www.rfc-editor.org/rfc/rfc8446</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC9420">[RFC9420]</dt>
       <dd>
