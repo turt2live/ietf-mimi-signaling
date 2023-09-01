@@ -36,9 +36,10 @@ author:
     email: matthew@matrix.org
 
 normative:
+  RFC4648:
 
 informative:
-  RFC1123:
+  RFC8446:
 
 
 --- abstract
@@ -97,127 +98,153 @@ described in this document.
 Terms from {{!I-D.barnes-mimi-arch}} and {{!I-D.ralston-mimi-terminology}} are used
 throughout this document. {{!I-D.barnes-mimi-arch}} takes precedence where there's conflict.
 
-# Room Model {#int-room-model}
+Other terms include:
 
-**TODO**: Check for overlap with arch
+*Unpadded Base64*: Serialization as described by {{Section 4 of RFC4648}} with padding (`=`
+characters) removed.
 
-A room is a conceptual place where events are sent among users. These events carry information
-such as the new policy configuration, application messages, and other room state information
-as needed. Receiving events is left as a responsibility for the transport.
+*URL-Safe Base64*: As described by {{Section 5 of RFC4648}}. May also be unpadded, as above.
 
-Rooms have two primary event definitions:
+*Redaction*: An algorithm to remove fields irrelevant to the signaling protocol's operation.
+This should not be confused with message deletion/removal, where a user wishes to delete
+content they previously sent in the room. Redaction is reserved for protocol operation
+exclusively. See {{int-redactions}}.
 
-* **State events**, containing metadata and policy configuration.
-* **Message events**, containing application-specific data. For example, encrypted conversation
-  activity.
+*Content Hash*: A SHA256 {{!RFC6234}} hash covering the unredacted event. See {{int-content-hash}}.
 
-Events reference the event preceeding themselves linearly. The hub server is expected to enforce
-this linear relationship, and therefore events have two representations. Events not yet processed
-by a hub server are known as "limited events", and are lacking authorization and ordering information.
-They are not sent until they become "fully-formed events" by a hub server, where the missing
-auth and ordering fields are added. A hub server MUST only emit fully-formed events over its
-transport, though it does *receive* limited events from other follower servers.
+*Reference Hash*: A SHA256 {{!RFC6234}} hash covering the essential fields of an event,
+including the content hash. See {{int-reference-hash}}.
 
-Throughout this document, the word "event" means "fully-formed event" unless otherwise qualified
-as a "limited event". This implies that the event has been accepted by the hub into the room.
+# Room Structure
 
-Each room has exactly one set of policies it follows. Once the policy is set, it cannot have
-rules added or removed. The policy can only be configured using state events. The ability to send
-any particular event is determined by policy. If a room wishes to use a new set of policies, it
-must replace itself using a new room identifier.
+Rooms consist of an identifier and linear linked-list of events. The first event MUST be
+a create event ({{int-ev-create}}) to establish the policy and encryption/security protocol
+the room uses. The second event MUST be the user membership event ({{int-ev-member}}) for
+the creator. All other events follow, and are sequenced into the linked-list by the hub server.
 
-The state events which affect how the policy operates are known as "auth events". Message events
-can never be an auth event. Both message and state events reference the auth events which permit
-it to be sent to the room, authorizing its existence in that room. The "auth chain" for an event
-is the recursive collection of auth events. That is, the auth events for the event and the auth
-events of those events and so on.
+The linked-list represents the set of accepted events in the room. Rejected or illegal events
+are excluded. The hub server MUST enforce the room's policy upon the room. Follower servers
+SHOULD additionally enforce the policy, preventing the hub from accepting illegal events.
 
-The first event in the room is the "create event". This event defines the specific set of policies
-the room is using. The create event MUST NOT have any preceeding events, and MUST be an auth event
-for all future events. The create event additionally specifies the specific encryption algorithm
-and configuration for the room, enabling the room's choice of encryption & security layers. For
-MIMI, this is expected to be the algorithm specified by **TODO**: Link to E2ES I-D.
+Events point to their parent event, as sequenced by the hub, and the policy-configuring state
+events which prove the event is allowed in the room (the event's "auth events"). The create
+event MUST be included in the auth events, unless the event is the create event itself. Other
+examples of auth events include the sender's membership event and current permissions event.
 
-The create event is described in more detail in {{int-ev-create}}.
+This structure allows a server to discard events it no longer needs, but can easily be found
+later. For example, a follower server might only persist the create event and a dozen most
+recent events. If the server then has a need to "backfill" then it can simply use the `prevEvent`
+pointer off the oldest (non-create) event it has until eventually hitting the intended mark
+or create event.
 
-Rooms are identified under the creating server's domain, creating a namespace. Room IDs are not
-intended to be parsed or human readable. The unique portion of the room ID, the localpart, is
-deliberately an implementation detail. Servers can use any pattern they wish for localparts, so
-long as the resulting room ID hasn't been used before.
-
-The server name in the room ID is only used to validate the create event and declare the initial
-hub server in the room. Otherwise, the server name serves no purpose. The server might not even
-be participating in the room anymore.
-
-The ABNF {{!RFC5234}} grammar for a room ID is:
-
-~~~
-room_id = "!" room_id_localpart ":" server_name
-room_id_localpart = 1*opaque
-opaque = DIGIT / ALPHA / "-" / "." / "~" / "_"
-~~~
-
-`server_name` is as described by [I-D.barnes-mimi-arch TODO: Use a real link](https://bifurcation.github.io/mimi-arch/#go.draft-barnes-mimi-arch.html).
-
-Room IDs MUST be case sensitive and MUST NOT exceed 255 characters.
-
-Example: `!cEXuEjziVcCzbxbqmN:example.org`
-
-## Room History
-
-Consider the following series of events:
+In diagram form, a room looks as such:
 
 ~~~aasvg
-A <-- B <-- C <-- D
++---------------+   +---------------+   +------------------+
+| m.room.create |<--| m.room.member |<--| m.room.encrypted |
++---------------+   +---------------+   +------------------+
+       ^                    ^                     |
+       +--------------------+---------------------+
 ~~~
-{: #overview title="A four event room." }
+{: #overview title="A room made up of events." }
 
-The first event, A, is the create event ({{int-ev-create}}) for the room. B is the creator's
-join event ({{int-ev-user}}), C could be an encrypted "hello world" text message, and D an
-invite ({{int-ev-user}}) for another user. Collectively, this linear set of events creates
-the history for the room.
+The `m.room.encrypted` event (not specified in this document) has the `m.room.member` event
+as its only previous event, but points at both the `m.room.member` and `m.room.create` events
+as auth events. In practice, a room would likely have more `m.room.member` events to represent
+other users in the room, rather than this example user conversing with themselves.
 
-**TODO**: Does history visibility go here?
+**TODO(TR): Should we replace room IDs with the create event's ID?**
 
-## User and Server Participation
+# Events {#int-events}
 
-**TODO**: This?
-
-# User Model
-
-Users belong to a server, and are represented by a user ID. Each user ID has a **localpart**
-and references the server which is responsible for that user.
-
-The ABNF {{!RFC5234}} grammar for a user ID is:
+The concept of events is described by Section 5.1 of {{!I-D.barnes-mimi-arch}}. An event is
+authenticated against its TLS presentation language format ({{Section 3 of RFC8446}}):
 
 ~~~
-user_id = "@" user_id_localpart ":" server_name
-user_id_localpart = 1*user_id_char
-user_id_char = DIGIT
-             / %x61-7A                   ; a-z
-             / "-" / "." / "="
-             / "_" / "/" / "+"
+// Consists of a server's signatures using their signing key. The transport
+// specification defines which specific signing key algorithm is used. This
+// document describes *what* a signature covers.
+opaque Signatures;
+struct {
+  opaque roomId;               // where the event is sent to
+  opaque type;                 // the type of event. Defines format for content
+  opaque [[stateKey]];         // if present, the event is a state event
+  opaque sender;               // who or what sent this event
+  opaque content;              // binary event content (TODO(TR): type??)
+  opaque authEvents[];         // the event IDs of the auth events
+  opaque prevEvent;            // the parent event ID
+  uint8 originContentHash[32]; // the origin server's content hash of the event
+  Signatures hubSignature;
+  Signatures originSignature;
+} Event;
 ~~~
 
-Like room IDs, `server_name` is assumed to be compliant with {{Section 2.1 of RFC1123}}.
+**TODO(TR): Should we bring over origin_server_ts?**
 
-Room IDs MUST be case sensitive and MUST NOT exceed 255 characters.
+**TODO(TR): Maximum lengths? (or is this a transport problem?)**
 
-Example: `@watch/for/slashes:example.org`
+Note that an "event ID" is not specified on the object. The event ID for an event is the
+sigil `$` followed by the URL-Safe Unpadded Base64-encoded reference hash ({{int-reference-hash}})
+of the event.
 
-**TODO**: Describe how pseudo IDs work
+The "origin server" of an event is the server denoted/implied by the `sender`.
 
-# Auth Events
+## Reference Hash {#int-reference-hash}
 
-Mentioned in {{int-room-model}}, auth events are the state events which configure the policy
-for the room. By name, they are:
+Events are referenced by ID in relation to each other, forming the room history and auth
+chain. If the event ID was a sender-generated value, any server along the send or receive
+path could "replace" that event with another perfectly legal event, both using the same ID.
 
-* Membership events
-* Role events
-* The join rules event
-* The create event
+By using a calculated value, namely the reference hash, if a server does try to replace the
+event then it would result in a completely different event ID. That event ID becomes impossible
+to reference as it wouldn't be part of the proper room history.
 
-**TODO**: The rest of this. Describe auth chain in more detail.
+**TODO(TR): There might be a bug in here. Even with a reference hash, the malicious event
+is only made illegal upon discovery of a later event. This means we end up having to evict
+an event or two, which breaks append-only semantics.**
+
+To calculate a reference hash, the event is first redacted ({{int-redactions}}) alongside
+`hubSignature` and `originSignature` fields being removed. The resulting binary is then
+hashed using SHA256 {{!RFC6234}}.
+
+To further create an event ID, the resulting hash is encoded using URL-Safe Unpadded Base64
+and prefixed with the `$` sigil.
+
+## Content Hash {#int-content-hash}
+
+An event's content hash prevents servers from modifying details of the event not covered
+by the reference hash itself. For example, a room name state event doesn't have the name
+itself covered by a reference hash because it's redacted, so it's instead covered by the
+content hash, which is in turn covered by the reference hash. This allows the event to
+later be redacted without affecting the event ID of that event.
+
+To calculate a content hash, the following fields are removed from the event first:
+
+* `originContentHash`
+* `hubSignature`
+* `originSignature`
+* `prevEvent`
+* `authEvents`
+
+`authEvents` and `prevEvent` are removed because they are populated by the hub server. The
+content hash is to preserve the origin server's event, not the hub server's.
+
+The resulting binary is then hashed using SHA256 {{!RFC6234}}.
+
+## Redaction {#int-redactions}
+
+The process of removing fields from an event which aren't important for the overall protocol
+to operate is known as "redaction". This document protects fields of events required for
+signaling to work while a policy document or encryption/security protocol will define their
+own fields. For example, the MLS ciphertext for a proposal or commit might be preserved through
+redaction to avoid breaking the MLS group for future participants.
+
+The default behaviour for any event type is to remove all fields *not* specified by {{int-events}}
+plus `content`. Individual event types MAY specify their own redaction behaviour for `content`.
+
+## State Events
+
+**TODO**: This. What are they?
 
 ## `m.room.create` {#int-ev-create}
 
