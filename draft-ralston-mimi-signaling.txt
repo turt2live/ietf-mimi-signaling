@@ -156,9 +156,9 @@ Table of Contents
    _URL-Safe Base64_: As described by Section 5 of [RFC4648].  May also
    be unpadded, as above.
 
-   _Redaction_: An algorithm to remove fields irrelevant to the
-   signaling protocol's operation.  This should not be confused with
-   message deletion/removal, where a user wishes to delete content they
+   _Redaction_: An algorithm to remove fields irrelevant to the overall
+   protocol's operation.  This should not be confused with message
+   deletion/removal, where a user wishes to delete content they
    previously sent in the room.  Redaction is reserved for protocol
    operation exclusively.  See Section 4.3.
 
@@ -203,7 +203,7 @@ Table of Contents
    | m.room.create |<--| m.room.member |<--| m.room.encrypted |
    +---------------+   +---------------+   +------------------+
           ^                    ^                     |
-          +--------------------+---------------------+
+          +--------------------+-----auth events-----+
 
                     Figure 1: A room made up of events.
 

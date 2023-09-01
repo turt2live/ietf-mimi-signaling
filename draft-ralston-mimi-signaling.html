@@ -1279,7 +1279,7 @@ throughout this document. <span>[<a href="#I-D.barnes-mimi-arch" class="cite xre
 <p id="section-2-4"><em>Unpadded Base64</em>: Serialization as described by <span><a href="https://rfc-editor.org/rfc/rfc4648#section-4" class="relref">Section 4</a> of [<a href="#RFC4648" class="cite xref">RFC4648</a>]</span> with padding (<code>=</code>
 characters) removed.<a href="#section-2-4" class="pilcrow">¶</a></p>
 <p id="section-2-5"><em>URL-Safe Base64</em>: As described by <span><a href="https://rfc-editor.org/rfc/rfc4648#section-5" class="relref">Section 5</a> of [<a href="#RFC4648" class="cite xref">RFC4648</a>]</span>. May also be unpadded, as above.<a href="#section-2-5" class="pilcrow">¶</a></p>
-<p id="section-2-6"><em>Redaction</em>: An algorithm to remove fields irrelevant to the signaling protocol's operation.
+<p id="section-2-6"><em>Redaction</em>: An algorithm to remove fields irrelevant to the overall protocol's operation.
 This should not be confused with message deletion/removal, where a user wishes to delete
 content they previously sent in the room. Redaction is reserved for protocol operation
 exclusively. See <a href="#int-redactions" class="auto internal xref">Section 4.3</a>.<a href="#section-2-6" class="pilcrow">¶</a></p>
@@ -1332,7 +1332,8 @@ or create event.<a href="#section-3-4" class="pilcrow">¶</a></p>
               <path d="M 8,64 L 136,64" fill="none" stroke="black"></path>
               <path d="M 168,64 L 296,64" fill="none" stroke="black"></path>
               <path d="M 328,64 L 480,64" fill="none" stroke="black"></path>
-              <path d="M 64,96 L 408,96" fill="none" stroke="black"></path>
+              <path d="M 64,96 L 272,96" fill="none" stroke="black"></path>
+              <path d="M 368,96 L 408,96" fill="none" stroke="black"></path>
               <polygon class="arrowhead" points="312,48 300,42.4 300,53.6" fill="black" transform="rotate(180,304,48)"></polygon>
               <polygon class="arrowhead" points="240,72 228,66.4 228,77.6" fill="black" transform="rotate(270,232,72)"></polygon>
               <polygon class="arrowhead" points="152,48 140,42.4 140,53.6" fill="black" transform="rotate(180,144,48)"></polygon>
@@ -1341,6 +1342,8 @@ or create event.<a href="#section-3-4" class="pilcrow">¶</a></p>
                 <text x="72" y="52">m.room.create</text>
                 <text x="232" y="52">m.room.member</text>
                 <text x="404" y="52">m.room.encrypted</text>
+                <text x="292" y="100">auth</text>
+                <text x="340" y="100">events</text>
               </g>
             </svg><a href="#section-3-6.1.1" class="pilcrow">¶</a>
 </div>
