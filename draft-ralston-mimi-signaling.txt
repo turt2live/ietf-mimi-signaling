@@ -227,14 +227,30 @@ Table of Contents
 // document describes *what* a signature covers.
 opaque Signatures;
 struct {
-  opaque roomId;               // where the event is sent to
-  opaque type;                 // the type of event. Defines format for content
-  opaque [[stateKey]];         // if present, the event is a state event
-  opaque sender;               // who or what sent this event
-  opaque content;              // binary event content (TODO(TR): type??)
-  opaque authEvents[];         // the event IDs of the auth events
-  opaque prevEvent;            // the parent event ID
-  uint8 originContentHash[32]; // the origin server's content hash of the event
+  // where the event is sent to
+  opaque roomId;
+
+  // the type of event. Defines format for content
+  opaque type;
+
+  // if present, the event is a state event
+  opaque [[stateKey]];
+
+  // who or what sent this event
+  opaque sender;
+
+  // binary event content (TODO(TR): type??)
+  opaque content;
+
+  // the event IDs of the auth events
+  opaque authEvents[];
+
+  // the parent event ID
+  opaque prevEvent;
+
+  // the origin server's content hash of the event
+  uint8 originContentHash[32];
+
   Signatures hubSignature;
   Signatures originSignature;
 } Event;
