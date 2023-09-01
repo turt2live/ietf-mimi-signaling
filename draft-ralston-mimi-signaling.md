@@ -250,7 +250,7 @@ plus `content`. Individual event types MAY specify their own redaction behaviour
 
 **TODO**: This.
 
-## `m.room.user` {#int-ev-user}
+## `m.room.member` {#int-ev-member}
 
 **TODO**: This.
 
@@ -260,10 +260,8 @@ plus `content`. Individual event types MAY specify their own redaction behaviour
 the room upon joining (we can discard people who joined and already left, and old message events).
 Someone needs to keep a copy of each event somewhere though, otherwise the room breaks.
 
-# [TODO: Sections]
+# TODO(TR): Sections
 
-* Event schema/shape. Do not require JSON, through signing might need a canonical format.
-  * Including hashes and event ID behaviours
 * Join, leave, etc operations overview.
 * `[User ->] Follower -> Hub` send path.
 * Actual examples of an event?
