@@ -258,15 +258,17 @@ redaction to avoid breaking the MLS group for future participants.
 The default behaviour for any event type is to remove all fields *not* specified by {{int-events}}
 plus `content`. Individual event types MAY specify their own redaction behaviour for `content`.
 
-## State Events
+## TODO(TR): Sections
+
+### State Events
 
 **TODO**: This. What are they?
 
-## `m.room.create` {#int-ev-create}
+### `m.room.create` {#int-ev-create}
 
 **TODO**: This.
 
-## `m.room.member` {#int-ev-member}
+### `m.room.member` {#int-ev-member}
 
 **TODO**: This.
 
