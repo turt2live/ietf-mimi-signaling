@@ -5,7 +5,7 @@
 More Instant Messaging Interoperability                       T. Ralston
 Internet-Draft                                                M. Hodgson
 Intended status: Informational          The Matrix.org Foundation C.I.C.
-Expires: 4 March 2024                                   1 September 2023
+Expires: 6 March 2024                                   3 September 2023
 
 
                         MIMI Signaling Protocol
@@ -50,7 +50,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 4 March 2024.
+   This Internet-Draft will expire on 6 March 2024.
 
 Copyright Notice
 
@@ -75,9 +75,10 @@ Table of Contents
      4.1.  Reference Hash
      4.2.  Content Hash
      4.3.  Redaction
-     4.4.  State Events
-     4.5.  m.room.create
-     4.6.  m.room.member
+     4.4.  TODO(TR): Sections
+       4.4.1.  State Events
+       4.4.2.  m.room.create
+       4.4.3.  m.room.member
    5.  History Model
    6.  TODO(TR): Sections
    7.  Security Considerations
@@ -171,9 +172,9 @@ Table of Contents
 3.  Room Structure
 
    Rooms consist of an identifier and linear linked-list of events.  The
-   first event MUST be a create event (Section 4.5) to establish the
+   first event MUST be a create event (Section 4.4.2) to establish the
    policy and encryption/security protocol the room uses.  The second
-   event MUST be the user membership event (Section 4.6) for the
+   event MUST be the user membership event (Section 4.4.3) for the
    creator.  All other events follow, and are sequenced into the linked-
    list by the hub server.
 
@@ -333,15 +334,17 @@ struct {
    _not_ specified by Section 4 plus content.  Individual event types
    MAY specify their own redaction behaviour for content.
 
-4.4.  State Events
+4.4.  TODO(TR): Sections
+
+4.4.1.  State Events
 
    *TODO*: This.  What are they?
 
-4.5.  m.room.create
+4.4.2.  m.room.create
 
    *TODO*: This.
 
-4.6.  m.room.member
+4.4.3.  m.room.member
 
    *TODO*: This.
 
