@@ -84,16 +84,14 @@ Table of Contents
    7.  Transport
      7.1.  Sending Events
      7.2.  Retrieving Events
-   8.  Security Considerations
-   9.  IANA Considerations
-     9.1.  Event Types Registry
-       9.1.1.  MIMI Namespace Conventions
-     9.2.  Policy IDs
-       9.2.1.  MIMI Namespace Conventions
-   10. References
-     10.1.  Normative References
-     10.2.  Informative References
-   Acknowledgments
+   8.  IANA Considerations
+     8.1.  Event Types Registry
+       8.1.1.  MIMI Namespace Conventions
+     8.2.  Policy IDs
+       8.2.1.  MIMI Namespace Conventions
+   9.  References
+     9.1.  Normative References
+     9.2.  Informative References
    Authors' Addresses
 
 1.  Introduction
@@ -223,7 +221,9 @@ Table of Contents
    users in the room, rather than this example user conversing with
    themselves.
 
-   *TODO(TR): Should we replace room IDs with the create event's ID?*
+   *TODO(TR): Should we replace room IDs with the create event's ID?
+   [GH issue (https://github.com/turt2live/ietf-mimi-signaling/
+   issues/1)]*
 
 4.  Events
 
@@ -265,9 +265,12 @@ struct {
   Signatures originSignature;
 } Event;
 
-   *TODO(TR): Should we bring over origin_server_ts?*
+   *TODO(TR): Should we bring over origin_server_ts?  [GH issue
+   (https://github.com/turt2live/ietf-mimi-signaling/issues/2)]*
 
-   *TODO(TR): Maximum lengths? (or is this a transport/not-us problem?)*
+   *TODO(TR): Maximum lengths? (or is this a transport/not-us problem?)
+   [GH issue (https://github.com/turt2live/ietf-mimi-signaling/
+   issues/3)]*
 
    Note that an "event ID" is not specified on the object.  The event ID
    for an event is the sigil $ followed by the URL-Safe Unpadded
@@ -277,7 +280,8 @@ struct {
    sender.
 
    *TODO(TR): Do we need to describe how events are extensible? ie:
-   being able to add things to the m.room.create event content*
+   being able to add things to the m.room.create event content.  [GH
+   issue (https://github.com/turt2live/ietf-mimi-signaling/issues/4)]*
 
 4.1.  Reference Hash
 
@@ -290,11 +294,6 @@ struct {
    does try to replace the event then it would result in a completely
    different event ID.  That event ID becomes impossible to reference as
    it wouldn't be part of the proper room history.
-
-   *TODO(TR): There might be a bug in here.  Even with a reference hash,
-   the malicious event is only made illegal upon discovery of a later
-   event.  This means we end up having to evict an event or two, which
-   breaks append-only semantics.*
 
    To calculate a reference hash, the event is first redacted
    (Section 4.3) alongside hubSignature and originSignature fields being
@@ -451,7 +450,8 @@ struct {
 
 7.1.  Sending Events
 
-   *TODO(TR): Specifics.*
+   *TODO(TR): Specifics.  [GH issue (https://github.com/turt2live/ietf-
+   mimi-signaling/issues/5)]*
 
    *  One event at a time
 
@@ -475,7 +475,8 @@ struct {
    If a server notices that it missed an event, or simply wishes to re-
    request a particular event, it can use the following operations.
 
-   *TODO(TR): Specifics.*
+   *TODO(TR): Specifics.  [GH issue (https://github.com/turt2live/ietf-
+   mimi-signaling/issues/5)]*
 
    *  Get event by ID
 
@@ -483,11 +484,7 @@ struct {
 
    *  Get batch of previous events?
 
-8.  Security Considerations
-
-   *TODO*: This
-
-9.  IANA Considerations
+8.  IANA Considerations
 
    IANA creates the following registries:
 
@@ -495,9 +492,10 @@ struct {
 
    *  Policy IDs
 
-9.1.  Event Types Registry
+8.1.  Event Types Registry
 
-   *TODO(TR): Is this what IANA actually wants?*
+   *TODO(TR): Is this what IANA actually wants?  [GH issue
+   (https://github.com/turt2live/ietf-mimi-signaling/issues/6)]*
 
    An event type is used to determine the type of content being carried
    by an event.  The type MAY further influence policy, participation,
@@ -529,14 +527,15 @@ struct {
 
    *  m.room.topic (Section 5.3)
 
-9.1.1.  MIMI Namespace Conventions
+8.1.1.  MIMI Namespace Conventions
 
    Events in the m. namespace SHOULD use m.room. as a prefix to account
    for future flexibility and expansion.
 
-9.2.  Policy IDs
+8.2.  Policy IDs
 
-   *TODO(TR): Is this what IANA actually wants?*
+   *TODO(TR): Is this what IANA actually wants?[GH issue
+   (https://github.com/turt2live/ietf-mimi-signaling/issues/6)]*
 
    A policy ID is the identifier to describe the policy envelope the
    room is using.  Policy IDs MUST be prefixed with a reverse domain
@@ -547,15 +546,15 @@ struct {
    This document does not describe any initial entries for this
    registry.
 
-9.2.1.  MIMI Namespace Conventions
+8.2.1.  MIMI Namespace Conventions
 
    Policy IDs in the m. namespace SHOULD be suffixed with an integer to
    denote relative ordering/stability.  For example, m.0 for an initial
    "version" of the policy envelope.
 
-10.  References
+9.  References
 
-10.1.  Normative References
+9.1.  Normative References
 
    [I-D.barnes-mimi-arch]
               Barnes, R., "An Architecture for More Instant Messaging
@@ -588,7 +587,7 @@ struct {
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
 
-10.2.  Informative References
+9.2.  Informative References
 
    [RFC8446]  Rescorla, E., "The Transport Layer Security (TLS) Protocol
               Version 1.3", RFC 8446, DOI 10.17487/RFC8446, August 2018,
@@ -598,10 +597,6 @@ struct {
               Omara, E., and K. Cohn-Gordon, "The Messaging Layer
               Security (MLS) Protocol", RFC 9420, DOI 10.17487/RFC9420,
               July 2023, <https://www.rfc-editor.org/rfc/rfc9420>.
-
-Acknowledgments
-
-   *TODO*: This
 
 Authors' Addresses
 
