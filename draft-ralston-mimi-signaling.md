@@ -1,7 +1,7 @@
 ---
 title: "MIMI Signaling Protocol"
 abbrev: "MIMI Signaling Protocol"
-category: info
+category: std
 
 docname: draft-ralston-mimi-signaling-latest
 submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
