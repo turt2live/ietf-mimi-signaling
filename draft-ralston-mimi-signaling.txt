@@ -80,7 +80,7 @@ Table of Contents
      5.3.  m.room.topic
    6.  Protocol Events
      6.1.  m.room.create
-       6.1.1.  m.room.user
+     6.2.  m.room.user
    7.  Transport
      7.1.  Sending Events
      7.2.  Retrieving Events
@@ -176,7 +176,7 @@ Table of Contents
    Rooms consist of an identifier and linear linked-list of events.  The
    first event MUST be a create event (Section 6.1) to establish the
    policy and encryption/security protocol the room uses.  The second
-   event MUST be the user participation event (Section 6.1.1) for the
+   event MUST be the user participation event (Section 6.2) for the
    creator.  All other events follow, and are sequenced into the linked-
    list by the hub server.
 
@@ -427,7 +427,7 @@ struct {
 
    *Redaction considerations*: All content is _not_ redacted.
 
-6.1.1.  m.room.user
+6.2.  m.room.user
 
    *State key*: The user ID the participation event affects.
 
@@ -519,7 +519,7 @@ struct {
 
    *  m.room.create (Section 6.1)
 
-   *  m.room.user (Section 6.1.1)
+   *  m.room.user (Section 6.2)
 
    *  m.room.name (Section 5.1)
 

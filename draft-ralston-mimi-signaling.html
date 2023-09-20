@@ -1203,11 +1203,9 @@ described by <span>[<a href="#I-D.barnes-mimi-arch" class="cite xref">I-D.barnes
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
                 <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-mroomcreate" class="internal xref"><code>m.room.create</code></a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1.2.1">
-                    <p id="section-toc.1-1.6.2.1.2.1.1"><a href="#section-6.1.1" class="auto internal xref">6.1.1</a>.  <a href="#name-mroomuser" class="internal xref"><code>m.room.user</code></a></p>
 </li>
-                </ul>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
+                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-mroomuser" class="internal xref"><code>m.room.user</code></a></p>
 </li>
             </ul>
 </li>
@@ -1328,7 +1326,7 @@ including the content hash. See <a href="#int-reference-hash" class="auto intern
       </h2>
 <p id="section-3-1">Rooms consist of an identifier and linear linked-list of events. The first event <span class="bcp14">MUST</span> be
 a create event (<a href="#int-ev-create" class="auto internal xref">Section 6.1</a>) to establish the policy and encryption/security protocol
-the room uses. The second event <span class="bcp14">MUST</span> be the user participation event (<a href="#int-ev-user" class="auto internal xref">Section 6.1.1</a>) for
+the room uses. The second event <span class="bcp14">MUST</span> be the user participation event (<a href="#int-ev-user" class="auto internal xref">Section 6.2</a>) for
 the creator. All other events follow, and are sequenced into the linked-list by the hub server.<a href="#section-3-1" class="pilcrow">¶</a></p>
 <p id="section-3-2">The linked-list represents the set of accepted events in the room. Rejected or illegal events
 are excluded. The hub server <span class="bcp14">MUST</span> enforce the room's policy upon the room. Follower servers
@@ -1619,25 +1617,25 @@ struct {
 </pre><a href="#section-6.1-3" class="pilcrow">¶</a>
 </div>
 <p id="section-6.1-4"><strong>Redaction considerations</strong>: All <code>content</code> is <em>not</em> redacted.<a href="#section-6.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
 <div id="int-ev-user">
-<section id="section-6.1.1">
-          <h4 id="name-mroomuser">
-<a href="#section-6.1.1" class="section-number selfRef">6.1.1. </a><a href="#name-mroomuser" class="section-name selfRef"><code>m.room.user</code></a>
-          </h4>
-<p id="section-6.1.1-1"><strong>State key</strong>: The user ID the participation event affects.<a href="#section-6.1.1-1" class="pilcrow">¶</a></p>
-<p id="section-6.1.1-2"><strong>Content</strong>:<a href="#section-6.1.1-2" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-6.1.1-3">
+<section id="section-6.2">
+        <h3 id="name-mroomuser">
+<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-mroomuser" class="section-name selfRef"><code>m.room.user</code></a>
+        </h3>
+<p id="section-6.2-1"><strong>State key</strong>: The user ID the participation event affects.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.2-2"><strong>Content</strong>:<a href="#section-6.2-2" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-6.2-3">
 <pre>
 struct {
   // The participation state the user is in. Legal values are described by
   // the policy envelope for the room.
   opaque state;
 } MRoomUserEventContent;
-</pre><a href="#section-6.1.1-3" class="pilcrow">¶</a>
+</pre><a href="#section-6.2-3" class="pilcrow">¶</a>
 </div>
-<p id="section-6.1.1-4"><strong>Redaction considerations</strong>: <code>state</code> under <code>content</code> is protected from redaction.<a href="#section-6.1.1-4" class="pilcrow">¶</a></p>
-</section>
-</div>
+<p id="section-6.2-4"><strong>Redaction considerations</strong>: <code>state</code> under <code>content</code> is protected from redaction.<a href="#section-6.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1731,7 +1729,7 @@ registry:<a href="#section-8.1-5" class="pilcrow">¶</a></p>
             <code>m.room.create</code> (<a href="#int-ev-create" class="auto internal xref">Section 6.1</a>)<a href="#section-8.1-6.1" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="section-8.1-6.2">
-            <code>m.room.user</code> (<a href="#int-ev-user" class="auto internal xref">Section 6.1.1</a>)<a href="#section-8.1-6.2" class="pilcrow">¶</a>
+            <code>m.room.user</code> (<a href="#int-ev-user" class="auto internal xref">Section 6.2</a>)<a href="#section-8.1-6.2" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="section-8.1-6.3">
             <code>m.room.name</code> (<a href="#int-ev-name" class="auto internal xref">Section 5.1</a>)<a href="#section-8.1-6.3" class="pilcrow">¶</a>
