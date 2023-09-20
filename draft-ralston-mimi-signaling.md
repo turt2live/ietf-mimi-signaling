@@ -44,9 +44,9 @@ informative:
 
 --- abstract
 
-The MIMI signaling protocol is responsible for user-level interactions in the overall
-MIMI protocol stack. It implements a *participation control protocol* and methods for a
-*policy control protocol* to operate, as described by {{!I-D.barnes-mimi-arch}}.
+The MIMI signaling protocol describes a framework for user-level interactions in
+the overall MIMI protocol stack. The event structure can be used by control protocols
+described by {{!I-D.barnes-mimi-arch}}.
 
 --- middle
 
@@ -59,12 +59,12 @@ a chartered requirement of MIMI, but do support other forms of encryption alongs
 their existing signaling.
 
 Within the MIMI stack of protocols, signaling is responsible for coordinating user-level
-actions and participation. This document describes such a protocol, encompassing a participation
-control protocol and a framework for a policy control protocol.
+actions and participation. This document describes such a protocol, encompassing
+a framework for control protocols to operate on top of.
 
-An overview of the architecture, including the control protocols mentioned, is described
-by {{!I-D.barnes-mimi-arch}}. Policy control protocols running over this document's
-framework are described by other documents.
+An overview of the architecture is described by {{!I-D.barnes-mimi-arch}}. Specific
+implementations of policy, participation, and security control protocols are *not*
+described by this document.
 
 MIMI has a chartered requirement to use MLS in the encryption/security protocol, however
 most existing messaging providers do not currently use MLS in their encryption. This
@@ -74,14 +74,12 @@ providers to insert their own encryption/security protocols external to the MIMI
 group.
 
 As described by {{!I-D.barnes-mimi-arch}}, events are sent in rooms to accomplish state
-changes and messaging. This document defines how events become "accepted" into the room
-by enforcing policy, and how state events can configure the policy envelope for future
-enforcement.
+changes and messaging. This document defines how events are copied between servers, and
+where control protocols become involved.
 
 This document describes an extensible approach to room policy, similar to how different
 encryption/security layers can be used within a room. The policy cannot change once set,
-though it can be configured using state events. This document describes some baseline
-policy aspects, but otherwise defers the majority of policy to other documents.
+though it can be configured using state events.
 
 A create state event is used to set the policy and encryption/security protocol. This
 create event is the very first event in the room - all other events are linearly placed
@@ -136,6 +134,10 @@ later. For example, a follower server might only persist the create event and a 
 recent events. If the server then has a need to "backfill" then it can simply use the `prevEvent`
 pointer off the oldest (non-create) event it has until eventually hitting the intended mark
 or create event.
+
+A hub server, however, MUST persist the entire chain of events from `m.room.create` onwards.
+This is to guarantee that at least one server in the room has the full history for the room
+available.
 
 In diagram form, a room looks as such:
 
@@ -363,16 +365,6 @@ struct {
 
 **Redaction considerations**: `state` under `content` is protected from redaction.
 
-# Room History
-
-The hub server for a room is required to persist each and every event sent to a room. The
-collection of these events is known as the "room history".
-
-All other servers in the room are not required to persist the room's events.
-
-Specifics regarding the visibility of events in a room to a server or user are defined
-by the policy control protocol for the room.
-
 # Transport
 
 **TODO(TR): Link to I-D.kohbrok-mimi-transport** describes a series of REST endpoints
@@ -386,6 +378,9 @@ respect to signaling.
 * One event at a time
 * Mark whether it's hub->follower, or follower->hub
 * When follower->hub, mention that some fields are excluded on the event
+  * Hub then validates the event (proper shape, legal fields, enforce policy)
+  * If valid, hub appends its signatures and other fields, and adds it to the room
+  * Added events are then fanned out to all relevant servers
 * Unordered sequencing, re-assembled from `prevEvent`
 
 ## Retrieving Events
