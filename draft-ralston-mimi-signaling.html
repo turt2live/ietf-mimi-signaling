@@ -1628,14 +1628,15 @@ struct {
 <p id="section-6.2-2"><strong>Content</strong>:<a href="#section-6.2-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-6.2-3">
 <pre>
+opaque ParticipationState; // see policy envelope document
 struct {
   // The participation state the user is in. Legal values are described by
   // the policy envelope for the room.
-  opaque state;
+  ParticipationState participation;
 } MRoomUserEventContent;
 </pre><a href="#section-6.2-3" class="pilcrow">¶</a>
 </div>
-<p id="section-6.2-4"><strong>Redaction considerations</strong>: <code>state</code> under <code>content</code> is protected from redaction.<a href="#section-6.2-4" class="pilcrow">¶</a></p>
+<p id="section-6.2-4"><strong>Redaction considerations</strong>: <code>participation</code> under <code>content</code> is protected from redaction.<a href="#section-6.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
