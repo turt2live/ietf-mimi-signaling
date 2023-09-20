@@ -45,7 +45,7 @@ informative:
 --- abstract
 
 The MIMI signaling protocol is responsible for user-level interactions in the overall
-MIMI protocol stack. It implements a *membership control protocol* and methods for a
+MIMI protocol stack. It implements a *participation control protocol* and methods for a
 *policy control protocol* to operate, as described by {{!I-D.barnes-mimi-arch}}.
 
 --- middle
@@ -59,12 +59,12 @@ a chartered requirement of MIMI, but do support other forms of encryption alongs
 their existing signaling.
 
 Within the MIMI stack of protocols, signaling is responsible for coordinating user-level
-actions and membership. This document describes such a protocol, encompassing a membership
+actions and participation. This document describes such a protocol, encompassing a participation
 control protocol and a framework for a policy control protocol.
 
 An overview of the architecture, including the control protocols mentioned, is described
-by {{!I-D.barnes-mimi-arch}}. A proposed policy control protocol running over this
-signaling protocol is described by **TODO(TR): Policy draft**.
+by {{!I-D.barnes-mimi-arch}}. Policy control protocols running over this document's
+framework are described by other documents.
 
 MIMI has a chartered requirement to use MLS in the encryption/security protocol, however
 most existing messaging providers do not currently use MLS in their encryption. This
@@ -119,7 +119,7 @@ including the content hash. See {{int-reference-hash}}.
 
 Rooms consist of an identifier and linear linked-list of events. The first event MUST be
 a create event ({{int-ev-create}}) to establish the policy and encryption/security protocol
-the room uses. The second event MUST be the user membership event ({{int-ev-member}}) for
+the room uses. The second event MUST be the user participation event ({{int-ev-user}}) for
 the creator. All other events follow, and are sequenced into the linked-list by the hub server.
 
 The linked-list represents the set of accepted events in the room. Rejected or illegal events
@@ -129,7 +129,7 @@ SHOULD additionally enforce the policy, preventing the hub from accepting illega
 Events point to their parent event, as sequenced by the hub, and the policy-configuring state
 events which prove the event is allowed in the room (the event's "auth events"). The create
 event MUST be included in the auth events, unless the event is the create event itself. Other
-examples of auth events include the sender's membership event and current permissions event.
+examples of auth events include the sender's participation event and current permissions event.
 
 This structure allows a server to discard events it no longer needs, but can easily be found
 later. For example, a follower server might only persist the create event and a dozen most
@@ -140,17 +140,17 @@ or create event.
 In diagram form, a room looks as such:
 
 ~~~aasvg
-+---------------+   +---------------+   +------------------+
-| m.room.create |<--| m.room.member |<--| m.room.encrypted |
-+---------------+   +---------------+   +------------------+
-       ^                    ^                     |
-       +--------------------+-----auth events-----+
++---------------+   +-------------+   +------------------+
+| m.room.create |<--| m.room.user |<--| m.room.encrypted |
++---------------+   +-------------+   +------------------+
+       ^                    ^                   |
+       +--------------------+---auth events-----+
 ~~~
 {: #overview title="A room made up of events." }
 
-The `m.room.encrypted` event (not specified in this document) has the `m.room.member` event
-as its only previous event, but points at both the `m.room.member` and `m.room.create` events
-as auth events. In practice, a room would likely have more `m.room.member` events to represent
+The `m.room.encrypted` event (not specified in this document) has the `m.room.user` event
+as its only previous event, but points at both the `m.room.user` and `m.room.create` events
+as auth events. In practice, a room would likely have more `m.room.user` events to represent
 other users in the room, rather than this example user conversing with themselves.
 
 **TODO(TR): Should we replace room IDs with the create event's ID?**
@@ -170,6 +170,7 @@ struct {
   opaque roomId;
 
   // the type of event. Defines format for content
+  // See "Event Types" IANA registry.
   opaque type;
 
   // if present, the event is a state event
@@ -178,7 +179,7 @@ struct {
   // who or what sent this event
   opaque sender;
 
-  // binary event content (TODO(TR): type??)
+  // binary type-specific event content (TODO(TR): type??)
   opaque content;
 
   // the event IDs of the auth events
@@ -197,13 +198,16 @@ struct {
 
 **TODO(TR): Should we bring over origin_server_ts?**
 
-**TODO(TR): Maximum lengths? (or is this a transport problem?)**
+**TODO(TR): Maximum lengths? (or is this a transport/not-us problem?)**
 
 Note that an "event ID" is not specified on the object. The event ID for an event is the
 sigil `$` followed by the URL-Safe Unpadded Base64-encoded reference hash ({{int-reference-hash}})
 of the event.
 
 The "origin server" of an event is the server denoted/implied by the `sender`.
+
+**TODO(TR): Do we need to describe how events are extensible? ie: being able to add things
+to the m.room.create event content**
 
 ## Reference Hash {#int-reference-hash}
 
@@ -255,34 +259,145 @@ signaling to work while a policy document or encryption/security protocol will d
 own fields. For example, the MLS ciphertext for a proposal or commit might be preserved through
 redaction to avoid breaking the MLS group for future participants.
 
-The default behaviour for any event type is to remove all fields *not* specified by {{int-events}}
-plus `content`. Individual event types MAY specify their own redaction behaviour for `content`.
+The default behaviour for any event type is to remove all fields *not* specified by {{int-events}},
+excluding `content`. Individual event types MAY specify their own redaction behaviour for `content`.
 
-## TODO(TR): Sections
+# Room Metadata
 
-### State Events
+Information about the room such as its name, topic (description), avatar, etc is described by state
+events. State events are also used for policy control configuration, as specified elsewhere in this
+document.
 
-**TODO**: This. What are they?
+This document describes the following event types for room metadata purposes.
 
-### `m.room.create` {#int-ev-create}
+## `m.room.name` {#int-ev-name}
 
-**TODO**: This.
+**State key**: Empty string.
 
-### `m.room.member` {#int-ev-member}
+**Content**:
 
-**TODO**: This.
+~~~
+struct {
+  // human-readable name for the room. May be empty or missing to denote
+  // no name.
+  opaque name;
+} MRoomNameEventContent;
+~~~
 
-# History Model
+**Redaction considerations**: None. It is considered a feature that the room name can be redacted
+to remove unwanted room names. A redacted `m.room.name` event is treated the same as a room without
+an `m.room.name` event present.
 
-**TODO**: This. Short version is servers only need the auth chain for all current members of
-the room upon joining (we can discard people who joined and already left, and old message events).
-Someone needs to keep a copy of each event somewhere though, otherwise the room breaks.
+## `m.room.avatar` {#int-ev-avatar}
 
-# TODO(TR): Sections
+**State key**: Empty string.
 
-* Join, leave, etc operations overview.
-* `[User ->] Follower -> Hub` send path.
-* Actual examples of an event?
+**Content**:
+
+~~~
+struct {
+  // human-usable image to differentiate the room visually.
+  // TODO(TR): Do we know how images are being sent in MIMI?
+  opaque mediaUri;
+} MRoomAvatarEventContent;
+~~~
+
+**Redaction considerations**: None. It is considered a feature that the room avatar can be redacted
+to remove unwanted room avatars. A redacted `m.room.avatar` event is treated the same as a room without
+an `m.room.avatar` event present.
+
+## `m.room.topic` {#int-ev-topic}
+
+**State key**: Empty string.
+
+**Content**:
+
+~~~
+struct {
+  // human-readable description for the room.
+  opaque topic;
+} MRoomTopicEventContent;
+~~~
+
+**Redaction considerations**: None. It is considered a feature that the room topic can be redacted
+to remove unwanted room topics. A redacted `m.room.topic` event is treated the same as a room without
+an `m.room.topic` event present.
+
+# Protocol Events
+
+## `m.room.create` {#int-ev-create}
+
+**State key**: Empty string.
+
+**Content**:
+
+~~~
+struct {
+  // The policy envelope the room is using.
+  // See the "Policy IDs" IANA registry.
+  opaque policyId;
+
+  // The encryption/security algorithm name in use for the room.
+  // TODO(TR): Does this also need an IANA registry? Currently we expect
+  // this to be `m.mls` or something, maybe with ciphersuite encoded or
+  // defined adjacent?
+  opaque encryptionAlgorithm;
+} MRoomCreateEventContent;
+~~~
+
+**Redaction considerations**: All `content` is *not* redacted.
+
+### `m.room.user` {#int-ev-user}
+
+**State key**: The user ID the participation event affects.
+
+**Content**:
+
+~~~
+struct {
+  // The participation state the user is in. Legal values are described by
+  // the policy envelope for the room.
+  opaque state;
+} MRoomUserEventContent;
+~~~
+
+**Redaction considerations**: `state` under `content` is protected from redaction.
+
+# Room History
+
+The hub server for a room is required to persist each and every event sent to a room. The
+collection of these events is known as the "room history".
+
+All other servers in the room are not required to persist the room's events.
+
+Specifics regarding the visibility of events in a room to a server or user are defined
+by the policy control protocol for the room.
+
+# Transport
+
+**TODO(TR): Link to I-D.kohbrok-mimi-transport** describes a series of REST endpoints
+for communicating between servers. The following transaction types are defined with
+respect to signaling.
+
+## Sending Events
+
+**TODO(TR): Specifics.**
+
+* One event at a time
+* Mark whether it's hub->follower, or follower->hub
+* When follower->hub, mention that some fields are excluded on the event
+* Unordered sequencing, re-assembled from `prevEvent`
+
+## Retrieving Events
+
+If a server notices that it missed an event, or simply wishes to re-request a
+particular event, it can use the following operations.
+
+**TODO(TR): Specifics.**
+
+* Get event by ID
+* Get state event by type & state key
+* Get batch of previous events?
 
 # Security Considerations
 
@@ -290,7 +405,56 @@ Someone needs to keep a copy of each event somewhere though, otherwise the room 
 
 # IANA Considerations
 
-This document has no IANA actions.
+IANA creates the following registries:
+
+* Event Types
+* Policy IDs
+
+## Event Types Registry
+
+**TODO(TR): Is this what IANA actually wants?**
+
+An event type is used to determine the type of `content` being carried by an event. The type MAY
+further influence policy, participation, or other aspects of the overall MIMI stack. For example,
+an event type for sending an encrypted MLS application message may be specified.
+
+Event types MUST be prefixed with a reverse domain namespace (i.e.: `org.example.my_event`). Event
+types starting with `m.` are reserved for use within the MIMI working group. Event types are issued
+on a first-come first-serve basis.
+
+Each event type registration MUST be accompanied by a `content` definition. Registrations MUST also
+indicate whether the event type is for a state event, and if so what describes a legal `stateKey`.
+An event type MUST NOT be used for both a state event and non-state event.
+
+The following event types and their `content` definitions are reserved as the first entries in this
+registry:
+
+* `m.room.create` ({{int-ev-create}})
+* `m.room.user` ({{int-ev-user}})
+* `m.room.name` ({{int-ev-name}})
+* `m.room.avatar` ({{int-ev-avatar}})
+* `m.room.topic` ({{int-ev-topic}})
+
+### MIMI Namespace Conventions
+
+Events in the `m.` namespace SHOULD use `m.room.` as a prefix to account for future flexibility and
+expansion.
+
+## Policy IDs
+
+**TODO(TR): Is this what IANA actually wants?**
+
+A policy ID is the identifier to describe the policy envelope the room is using. Policy IDs MUST be
+prefixed with a reverse domain namespace (i.e.: `org.example.my_event`). Policy IDs starting with
+`m.` are reserved for use within the MIMI working group. Policy IDs are issued on a first-come
+first-serve basis.
+
+This document does not describe any initial entries for this registry.
+
+### MIMI Namespace Conventions
+
+Policy IDs in the `m.` namespace SHOULD be suffixed with an integer to denote relative ordering/stability.
+For example, `m.0` for an initial "version" of the policy envelope.
 
 --- back
 
