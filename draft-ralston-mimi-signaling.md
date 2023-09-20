@@ -356,14 +356,15 @@ struct {
 **Content**:
 
 ~~~
+opaque ParticipationState; // see policy envelope document
 struct {
   // The participation state the user is in. Legal values are described by
   // the policy envelope for the room.
-  opaque state;
+  ParticipationState participation;
 } MRoomUserEventContent;
 ~~~
 
-**Redaction considerations**: `state` under `content` is protected from redaction.
+**Redaction considerations**: `participation` under `content` is protected from redaction.
 
 # Transport
 
