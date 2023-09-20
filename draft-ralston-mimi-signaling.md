@@ -349,7 +349,7 @@ struct {
 
 **Redaction considerations**: All `content` is *not* redacted.
 
-### `m.room.user` {#int-ev-user}
+## `m.room.user` {#int-ev-user}
 
 **State key**: The user ID the participation event affects.
 
