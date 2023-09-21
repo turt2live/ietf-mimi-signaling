@@ -1058,7 +1058,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Ralston &amp; Hodgson</td>
-<td class="center">Expires 23 March 2024</td>
+<td class="center">Expires 24 March 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1071,12 +1071,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ralston-mimi-signaling-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-09-20" class="published">20 September 2023</time>
+<time datetime="2023-09-21" class="published">21 September 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-03-23">23 March 2024</time></dd>
+<dd class="expires"><time datetime="2024-03-24">24 March 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1132,7 +1132,7 @@ described by <span>[<a href="#I-D.barnes-mimi-arch" class="cite xref">I-D.barnes
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 23 March 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 24 March 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1391,7 +1391,7 @@ as its only previous event, but points at both the <code>m.room.user</code> and 
 as auth events. In practice, a room would likely have more <code>m.room.user</code> events to represent
 other users in the room, rather than this example user conversing with themselves.<a href="#section-3-8" class="pilcrow">¶</a></p>
 <p id="section-3-9"><strong>TODO(TR): Should we replace room IDs with the create event's ID?
-[<a href="https://github.com/turt2live/ietf-mimi-signaling/issues/1">GH issue</a>]</strong><a href="#section-3-9" class="pilcrow">¶</a></p>
+(<a href="https://github.com/turt2live/ietf-mimi-signaling/issues/1">GH issue</a>)</strong><a href="#section-3-9" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="int-events">
@@ -1439,16 +1439,16 @@ struct {
 </pre><a href="#section-4-2" class="pilcrow">¶</a>
 </div>
 <p id="section-4-3"><strong>TODO(TR): Should we bring over origin_server_ts?
-[<a href="https://github.com/turt2live/ietf-mimi-signaling/issues/2">GH issue</a>]</strong><a href="#section-4-3" class="pilcrow">¶</a></p>
+(<a href="https://github.com/turt2live/ietf-mimi-signaling/issues/2">GH issue</a>)</strong><a href="#section-4-3" class="pilcrow">¶</a></p>
 <p id="section-4-4"><strong>TODO(TR): Maximum lengths? (or is this a transport/not-us problem?)
-[<a href="https://github.com/turt2live/ietf-mimi-signaling/issues/3">GH issue</a>]</strong><a href="#section-4-4" class="pilcrow">¶</a></p>
+(<a href="https://github.com/turt2live/ietf-mimi-signaling/issues/3">GH issue</a>)</strong><a href="#section-4-4" class="pilcrow">¶</a></p>
 <p id="section-4-5">Note that an "event ID" is not specified on the object. The event ID for an event is the
 sigil <code>$</code> followed by the URL-Safe Unpadded Base64-encoded reference hash (<a href="#int-reference-hash" class="auto internal xref">Section 4.1</a>)
 of the event.<a href="#section-4-5" class="pilcrow">¶</a></p>
 <p id="section-4-6">The "origin server" of an event is the server denoted/implied by the <code>sender</code>.<a href="#section-4-6" class="pilcrow">¶</a></p>
 <p id="section-4-7"><strong>TODO(TR): Do we need to describe how events are extensible? ie: being able to add things
 to the m.room.create event content.
-[<a href="https://github.com/turt2live/ietf-mimi-signaling/issues/4">GH issue</a>]</strong><a href="#section-4-7" class="pilcrow">¶</a></p>
+(<a href="https://github.com/turt2live/ietf-mimi-signaling/issues/4">GH issue</a>)</strong><a href="#section-4-7" class="pilcrow">¶</a></p>
 <div id="int-reference-hash">
 <section id="section-4.1">
         <h3 id="name-reference-hash">
@@ -1654,7 +1654,7 @@ respect to signaling.<a href="#section-7-1" class="pilcrow">¶</a></p>
         <h3 id="name-sending-events">
 <a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-sending-events" class="section-name selfRef">Sending Events</a>
         </h3>
-<p id="section-7.1-1"><strong>TODO(TR): Specifics. [<a href="https://github.com/turt2live/ietf-mimi-signaling/issues/5">GH issue</a>]</strong><a href="#section-7.1-1" class="pilcrow">¶</a></p>
+<p id="section-7.1-1"><strong>TODO(TR): Specifics. (<a href="https://github.com/turt2live/ietf-mimi-signaling/issues/5">GH issue</a>)</strong><a href="#section-7.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-7.1-2.1">One event at a time<a href="#section-7.1-2.1" class="pilcrow">¶</a>
 </li>
@@ -1683,7 +1683,7 @@ respect to signaling.<a href="#section-7-1" class="pilcrow">¶</a></p>
         </h3>
 <p id="section-7.2-1">If a server notices that it missed an event, or simply wishes to re-request a
 particular event, it can use the following operations.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
-<p id="section-7.2-2"><strong>TODO(TR): Specifics. [<a href="https://github.com/turt2live/ietf-mimi-signaling/issues/5">GH issue</a>]</strong><a href="#section-7.2-2" class="pilcrow">¶</a></p>
+<p id="section-7.2-2"><strong>TODO(TR): Specifics. (<a href="https://github.com/turt2live/ietf-mimi-signaling/issues/5">GH issue</a>)</strong><a href="#section-7.2-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-7.2-3.1">Get event by ID<a href="#section-7.2-3.1" class="pilcrow">¶</a>
 </li>
@@ -1713,7 +1713,7 @@ particular event, it can use the following operations.<a href="#section-7.2-1" c
         <h3 id="name-event-types-registry">
 <a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-event-types-registry" class="section-name selfRef">Event Types Registry</a>
         </h3>
-<p id="section-8.1-1"><strong>TODO(TR): Is this what IANA actually wants? [<a href="https://github.com/turt2live/ietf-mimi-signaling/issues/6">GH issue</a>]</strong><a href="#section-8.1-1" class="pilcrow">¶</a></p>
+<p id="section-8.1-1"><strong>TODO(TR): Is this what IANA actually wants? (<a href="https://github.com/turt2live/ietf-mimi-signaling/issues/6">GH issue</a>)</strong><a href="#section-8.1-1" class="pilcrow">¶</a></p>
 <p id="section-8.1-2">An event type is used to determine the type of <code>content</code> being carried by an event. The type <span class="bcp14">MAY</span>
 further influence policy, participation, or other aspects of the overall MIMI stack. For example,
 an event type for sending an encrypted MLS application message may be specified.<a href="#section-8.1-2" class="pilcrow">¶</a></p>
@@ -1758,7 +1758,7 @@ expansion.<a href="#section-8.1.1-1" class="pilcrow">¶</a></p>
         <h3 id="name-policy-ids">
 <a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-policy-ids" class="section-name selfRef">Policy IDs</a>
         </h3>
-<p id="section-8.2-1"><strong>TODO(TR): Is this what IANA actually wants?[<a href="https://github.com/turt2live/ietf-mimi-signaling/issues/6">GH issue</a>]</strong><a href="#section-8.2-1" class="pilcrow">¶</a></p>
+<p id="section-8.2-1"><strong>TODO(TR): Is this what IANA actually wants?(<a href="https://github.com/turt2live/ietf-mimi-signaling/issues/6">GH issue</a>)</strong><a href="#section-8.2-1" class="pilcrow">¶</a></p>
 <p id="section-8.2-2">A policy ID is the identifier to describe the policy envelope the room is using. Policy IDs <span class="bcp14">MUST</span> be
 prefixed with a reverse domain namespace (i.e.: <code>org.example.my_event</code>). Policy IDs starting with
 <code>m.</code> are reserved for use within the MIMI working group. Policy IDs are issued on a first-come
