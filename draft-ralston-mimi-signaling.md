@@ -156,7 +156,7 @@ as auth events. In practice, a room would likely have more `m.room.user` events 
 other users in the room, rather than this example user conversing with themselves.
 
 **TODO(TR): Should we replace room IDs with the create event's ID?
-[[GH issue](https://github.com/turt2live/ietf-mimi-signaling/issues/1)]**
+([GH issue](https://github.com/turt2live/ietf-mimi-signaling/issues/1))**
 
 # Events {#int-events}
 
@@ -200,10 +200,10 @@ struct {
 ~~~
 
 **TODO(TR): Should we bring over origin_server_ts?
-[[GH issue](https://github.com/turt2live/ietf-mimi-signaling/issues/2)]**
+([GH issue](https://github.com/turt2live/ietf-mimi-signaling/issues/2))**
 
 **TODO(TR): Maximum lengths? (or is this a transport/not-us problem?)
-[[GH issue](https://github.com/turt2live/ietf-mimi-signaling/issues/3)]**
+([GH issue](https://github.com/turt2live/ietf-mimi-signaling/issues/3))**
 
 Note that an "event ID" is not specified on the object. The event ID for an event is the
 sigil `$` followed by the URL-Safe Unpadded Base64-encoded reference hash ({{int-reference-hash}})
@@ -213,7 +213,7 @@ The "origin server" of an event is the server denoted/implied by the `sender`.
 
 **TODO(TR): Do we need to describe how events are extensible? ie: being able to add things
 to the m.room.create event content.
-[[GH issue](https://github.com/turt2live/ietf-mimi-signaling/issues/4)]**
+([GH issue](https://github.com/turt2live/ietf-mimi-signaling/issues/4))**
 
 ## Reference Hash {#int-reference-hash}
 
@@ -374,7 +374,7 @@ respect to signaling.
 
 ## Sending Events
 
-**TODO(TR): Specifics. [[GH issue](https://github.com/turt2live/ietf-mimi-signaling/issues/5)]**
+**TODO(TR): Specifics. ([GH issue](https://github.com/turt2live/ietf-mimi-signaling/issues/5))**
 
 * One event at a time
 * Mark whether it's hub->follower, or follower->hub
@@ -389,7 +389,7 @@ respect to signaling.
 If a server notices that it missed an event, or simply wishes to re-request a
 particular event, it can use the following operations.
 
-**TODO(TR): Specifics. [[GH issue](https://github.com/turt2live/ietf-mimi-signaling/issues/5)]**
+**TODO(TR): Specifics. ([GH issue](https://github.com/turt2live/ietf-mimi-signaling/issues/5))**
 
 * Get event by ID
 * Get state event by type & state key
@@ -404,7 +404,7 @@ IANA creates the following registries:
 
 ## Event Types Registry
 
-**TODO(TR): Is this what IANA actually wants? [[GH issue](https://github.com/turt2live/ietf-mimi-signaling/issues/6)]**
+**TODO(TR): Is this what IANA actually wants? ([GH issue](https://github.com/turt2live/ietf-mimi-signaling/issues/6))**
 
 An event type is used to determine the type of `content` being carried by an event. The type MAY
 further influence policy, participation, or other aspects of the overall MIMI stack. For example,
@@ -434,7 +434,7 @@ expansion.
 
 ## Policy IDs
 
-**TODO(TR): Is this what IANA actually wants?[[GH issue](https://github.com/turt2live/ietf-mimi-signaling/issues/6)]**
+**TODO(TR): Is this what IANA actually wants?([GH issue](https://github.com/turt2live/ietf-mimi-signaling/issues/6))**
 
 A policy ID is the identifier to describe the policy envelope the room is using. Policy IDs MUST be
 prefixed with a reverse domain namespace (i.e.: `org.example.my_event`). Policy IDs starting with
