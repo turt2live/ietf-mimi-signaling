@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2023-09-19T00:21:45.193011+00:00",
+  "timestamp": "2023-09-21T00:21:25.012151+00:00",
   "repo": "turt2live/ietf-mimi-signaling",
   "labels": [
     {
@@ -49,6 +49,103 @@
       "color": "ffffff"
     }
   ],
-  "issues": [],
+  "issues": [
+    {
+      "number": 1,
+      "id": "I_kwDOKAlNWc5xlv6t",
+      "title": "Should we replace room IDs with the create event's ID?",
+      "url": "https://github.com/turt2live/ietf-mimi-signaling/issues/1",
+      "state": "OPEN",
+      "author": "turt2live",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "see https://github.com/matrix-org/matrix-spec-proposals/pull/4051",
+      "createdAt": "2023-09-20T21:07:04Z",
+      "updatedAt": "2023-09-20T21:07:04Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 2,
+      "id": "I_kwDOKAlNWc5xlwGn",
+      "title": "Include `origin_server_ts` from Matrix?",
+      "url": "https://github.com/turt2live/ietf-mimi-signaling/issues/2",
+      "state": "OPEN",
+      "author": "turt2live",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Denotes the time the origin server sent the event",
+      "createdAt": "2023-09-20T21:07:47Z",
+      "updatedAt": "2023-09-20T21:07:47Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 3,
+      "id": "I_kwDOKAlNWc5xlwQ3",
+      "title": "Event field limits/restrictions",
+      "url": "https://github.com/turt2live/ietf-mimi-signaling/issues/3",
+      "state": "OPEN",
+      "author": "turt2live",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Maximum length for `type`, etc. May not be relevant at this layer.",
+      "createdAt": "2023-09-20T21:08:25Z",
+      "updatedAt": "2023-09-20T21:08:25Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 4,
+      "id": "I_kwDOKAlNWc5xlwxI",
+      "title": "Describe event extensibility",
+      "url": "https://github.com/turt2live/ietf-mimi-signaling/issues/4",
+      "state": "OPEN",
+      "author": "turt2live",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "For example, a sender (or protocol) can add whatever it wants on top of the specified details, though they will be redacted (unless saved by the policy protocol)",
+      "createdAt": "2023-09-20T21:09:31Z",
+      "updatedAt": "2023-09-20T21:09:31Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 5,
+      "id": "I_kwDOKAlNWc5xlxOq",
+      "title": "Transport transaction type descriptions",
+      "url": "https://github.com/turt2live/ietf-mimi-signaling/issues/5",
+      "state": "OPEN",
+      "author": "turt2live",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2023-09-20T21:10:46Z",
+      "updatedAt": "2023-09-20T21:10:46Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 6,
+      "id": "I_kwDOKAlNWc5xlxZI",
+      "title": "Verify IANA registry requirements",
+      "url": "https://github.com/turt2live/ietf-mimi-signaling/issues/6",
+      "state": "OPEN",
+      "author": "turt2live",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2023-09-20T21:11:22Z",
+      "updatedAt": "2023-09-20T21:11:22Z",
+      "closedAt": null,
+      "comments": []
+    }
+  ],
   "pulls": []
 }
