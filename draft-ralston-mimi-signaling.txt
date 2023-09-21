@@ -200,9 +200,15 @@ Table of Contents
    prevEvent pointer off the oldest (non-create) event it has until
    eventually hitting the intended mark or create event.
 
-   A hub server, however, MUST persist the entire chain of events from
-   m.room.create onwards.  This is to guarantee that at least one server
-   in the room has the full history for the room available.
+   A hub server, however, MUST persist the auth events chain for the
+   room.  This is to guarantee the room is portable in the event of a
+   hub transfer.
+
+   *OPEN QUESTION*: Hub transfers as a whole are not concretely
+   specified.
+
+   *TODO(TR): Hash chaining discussion outcomes (GH issue
+   (https://github.com/turt2live/ietf-mimi-signaling/issues/7))*
 
    In diagram form, a room looks as such:
 

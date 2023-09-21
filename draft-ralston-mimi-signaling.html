@@ -1340,14 +1340,16 @@ later. For example, a follower server might only persist the create event and a 
 recent events. If the server then has a need to "backfill" then it can simply use the <code>prevEvent</code>
 pointer off the oldest (non-create) event it has until eventually hitting the intended mark
 or create event.<a href="#section-3-4" class="pilcrow">¶</a></p>
-<p id="section-3-5">A hub server, however, <span class="bcp14">MUST</span> persist the entire chain of events from <code>m.room.create</code> onwards.
-This is to guarantee that at least one server in the room has the full history for the room
-available.<a href="#section-3-5" class="pilcrow">¶</a></p>
-<p id="section-3-6">In diagram form, a room looks as such:<a href="#section-3-6" class="pilcrow">¶</a></p>
+<p id="section-3-5">A hub server, however, <span class="bcp14">MUST</span> persist the auth events chain for the room. This is to guarantee
+the room is portable in the event of a hub transfer.<a href="#section-3-5" class="pilcrow">¶</a></p>
+<p id="section-3-6"><strong>OPEN QUESTION</strong>: Hub transfers as a whole are not concretely specified.<a href="#section-3-6" class="pilcrow">¶</a></p>
+<p id="section-3-7"><strong>TODO(TR): Hash chaining discussion outcomes
+(<a href="https://github.com/turt2live/ietf-mimi-signaling/issues/7">GH issue</a>)</strong><a href="#section-3-7" class="pilcrow">¶</a></p>
+<p id="section-3-8">In diagram form, a room looks as such:<a href="#section-3-8" class="pilcrow">¶</a></p>
 <span id="name-a-room-made-up-of-events"></span><div id="overview">
 <figure id="figure-1">
-        <div id="section-3-7.1">
-          <div class="alignLeft art-svg artwork" id="section-3-7.1.1">
+        <div id="section-3-9.1">
+          <div class="alignLeft art-svg artwork" id="section-3-9.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="112" width="472" viewBox="0 0 472 112" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
               <path d="M 8,32 L 8,64" fill="none" stroke="black"></path>
               <path d="M 64,72 L 64,96" fill="none" stroke="black"></path>
@@ -1379,19 +1381,19 @@ available.<a href="#section-3-5" class="pilcrow">¶</a></p>
                 <text x="276" y="100">auth</text>
                 <text x="324" y="100">events</text>
               </g>
-            </svg><a href="#section-3-7.1.1" class="pilcrow">¶</a>
+            </svg><a href="#section-3-9.1.1" class="pilcrow">¶</a>
 </div>
 </div>
 <figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
 <a href="#name-a-room-made-up-of-events" class="selfRef">A room made up of events.</a>
         </figcaption></figure>
 </div>
-<p id="section-3-8">The <code>m.room.encrypted</code> event (not specified in this document) has the <code>m.room.user</code> event
+<p id="section-3-10">The <code>m.room.encrypted</code> event (not specified in this document) has the <code>m.room.user</code> event
 as its only previous event, but points at both the <code>m.room.user</code> and <code>m.room.create</code> events
 as auth events. In practice, a room would likely have more <code>m.room.user</code> events to represent
-other users in the room, rather than this example user conversing with themselves.<a href="#section-3-8" class="pilcrow">¶</a></p>
-<p id="section-3-9"><strong>TODO(TR): Should we replace room IDs with the create event's ID?
-(<a href="https://github.com/turt2live/ietf-mimi-signaling/issues/1">GH issue</a>)</strong><a href="#section-3-9" class="pilcrow">¶</a></p>
+other users in the room, rather than this example user conversing with themselves.<a href="#section-3-10" class="pilcrow">¶</a></p>
+<p id="section-3-11"><strong>TODO(TR): Should we replace room IDs with the create event's ID?
+(<a href="https://github.com/turt2live/ietf-mimi-signaling/issues/1">GH issue</a>)</strong><a href="#section-3-11" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="int-events">
