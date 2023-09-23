@@ -1,0 +1,617 @@
+
+
+
+
+More Instant Messaging Interoperability                       T. Ralston
+Internet-Draft                                                M. Hodgson
+Intended status: Standards Track        The Matrix.org Foundation C.I.C.
+Expires: 26 March 2024                                 23 September 2023
+
+
+                        MIMI Signaling Protocol
+                  draft-ralston-mimi-signaling-latest
+
+Abstract
+
+   The MIMI signaling protocol describes a framework for user-level
+   interactions in the overall MIMI protocol stack.  The event structure
+   can be used by control protocols described by [I-D.barnes-mimi-arch].
+
+About This Document
+
+   This note is to be removed before publishing as an RFC.
+
+   The latest revision of this draft can be found at
+   https://turt2live.github.io/ietf-mimi-signaling/draft-ralston-mimi-
+   signaling.html.  Status information for this document may be found at
+   https://datatracker.ietf.org/doc/draft-ralston-mimi-signaling/.
+
+   Discussion of this document takes place on the More Instant Messaging
+   Interoperability Working Group mailing list (mailto:mimi@ietf.org),
+   which is archived at https://mailarchive.ietf.org/arch/browse/mimi/.
+   Subscribe at https://www.ietf.org/mailman/listinfo/mimi/.
+
+   Source for this draft and an issue tracker can be found at
+   https://github.com/turt2live/ietf-mimi-signaling.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 26 March 2024.
+
+Copyright Notice
+
+   Copyright (c) 2023 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.  Code Components
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
+
+Table of Contents
+
+   1.  Introduction
+   2.  Conventions and Definitions
+   3.  Room Structure
+   4.  Events
+     4.1.  Reference Hash
+     4.2.  Content Hash
+     4.3.  Redaction
+   5.  Room Metadata
+     5.1.  m.room.name
+     5.2.  m.room.avatar
+     5.3.  m.room.topic
+   6.  Protocol Events
+     6.1.  m.room.create
+     6.2.  m.room.user
+   7.  Transport
+     7.1.  Sending Events
+     7.2.  Retrieving Events
+   8.  IANA Considerations
+     8.1.  Event Types Registry
+       8.1.1.  MIMI Namespace Conventions
+     8.2.  Policy IDs
+       8.2.1.  MIMI Namespace Conventions
+   9.  References
+     9.1.  Normative References
+     9.2.  Informative References
+   Authors' Addresses
+
+1.  Introduction
+
+   The More Instant Messaging Interoperability (MIMI) working group is
+   responsible for specifying a protocol to achieve interoperability
+   among modern messaging providers.  Most providers do not currently
+   support Messaging Layer Security (MLS) [RFC9420], a chartered
+   requirement of MIMI, but do support other forms of encryption
+   alongside their existing signaling.
+
+   Within the MIMI stack of protocols, signaling is responsible for
+   coordinating user-level actions and participation.  This document
+   describes such a protocol, encompassing a framework for control
+   protocols to operate on top of.
+
+   An overview of the architecture is described by
+   [I-D.barnes-mimi-arch].  Specific implementations of policy,
+   participation, and security control protocols are _not_ described by
+   this document.
+
+   MIMI has a chartered requirement to use MLS in the encryption/
+   security protocol, however most existing messaging providers do not
+   currently use MLS in their encryption.  This document describes an
+   approach for enabling a given encryption/security protocol without
+   concerning itself with the specifics of such a protocol.  This allows
+   existing messaging providers to insert their own encryption/security
+   protocols external to the MIMI working group.
+
+   As described by [I-D.barnes-mimi-arch], events are sent in rooms to
+   accomplish state changes and messaging.  This document defines how
+   events are copied between servers, and where control protocols become
+   involved.
+
+   This document describes an extensible approach to room policy,
+   similar to how different encryption/security layers can be used
+   within a room.  The policy cannot change once set, though it can be
+   configured using state events.
+
+   A create state event is used to set the policy and encryption/
+   security protocol.  This create event is the very first event in the
+   room - all other events are linearly placed after it.
+
+   Abstract concepts are used for transport and persistence of rooms/
+   events.  For example, events can be persisted within an MLS group or
+   serialized in a different format than described in this document.
+
+2.  Conventions and Definitions
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in
+   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
+
+   Terms from [I-D.barnes-mimi-arch] and [I-D.ralston-mimi-terminology]
+   are used throughout this document.  [I-D.barnes-mimi-arch] takes
+   precedence where there's conflict.
+
+   Other terms include:
+
+   _Unpadded Base64_: Serialization as described by Section 4 of
+   [RFC4648] with padding (= characters) removed.
+
+   _URL-Safe Base64_: As described by Section 5 of [RFC4648].  May also
+   be unpadded, as above.
+
+   _Redaction_: An algorithm to remove fields irrelevant to the overall
+   protocol's operation.  This should not be confused with message
+   deletion/removal, where a user wishes to delete content they
+   previously sent in the room.  Redaction is reserved for protocol
+   operation exclusively.  See Section 4.3.
+
+   _Content Hash_: A SHA256 [RFC6234] hash covering the unredacted
+   event.  See Section 4.2.
+
+   _Reference Hash_: A SHA256 [RFC6234] hash covering the essential
+   fields of an event, including the content hash.  See Section 4.1.
+
+3.  Room Structure
+
+   Rooms consist of an identifier and linear linked-list of events.  The
+   first event MUST be a create event (Section 6.1) to establish the
+   policy and encryption/security protocol the room uses.  The second
+   event MUST be the user participation event (Section 6.2) for the
+   creator.  All other events follow, and are sequenced into the linked-
+   list by the hub server.
+
+   The linked-list represents the set of accepted events in the room.
+   Rejected or illegal events are excluded.  The hub server MUST enforce
+   the room's policy upon the room.  Follower servers SHOULD
+   additionally enforce the policy, preventing the hub from accepting
+   illegal events.
+
+   Events point to their parent event, as sequenced by the hub, and the
+   policy-configuring state events which prove the event is allowed in
+   the room (the event's "auth events").  The create event MUST be
+   included in the auth events, unless the event is the create event
+   itself.  Other examples of auth events include the sender's
+   participation event and current permissions event.
+
+   This structure allows a server to discard events it no longer needs,
+   but can easily be found later.  For example, a follower server might
+   only persist the create event and a dozen most recent events.  If the
+   server then has a need to "backfill" then it can simply use the
+   prevEvent pointer off the oldest (non-create) event it has until
+   eventually hitting the intended mark or create event.
+
+   A hub server, however, MUST persist the auth events chain for the
+   room.  This is to guarantee the room is portable in the event of a
+   hub transfer.
+
+   *OPEN QUESTION*: Hub transfers as a whole are not concretely
+   specified.
+
+   *TODO(TR): Hash chaining discussion outcomes (GH issue
+   (https://github.com/turt2live/ietf-mimi-signaling/issues/7))*
+
+   In diagram form, a room looks as such:
+
+   +---------------+   +-------------+   +------------------+
+   | m.room.create |<--| m.room.user |<--| m.room.encrypted |
+   +---------------+   +-------------+   +------------------+
+          ^                    ^                   |
+          +--------------------+---auth events-----+
+
+                    Figure 1: A room made up of events.
+
+   The m.room.encrypted event (not specified in this document) has the
+   m.room.user event as its only previous event, but points at both the
+   m.room.user and m.room.create events as auth events.  In practice, a
+   room would likely have more m.room.user events to represent other
+   users in the room, rather than this example user conversing with
+   themselves.
+
+   *TODO(TR): Should we replace room IDs with the create event's ID?
+   (GH issue (https://github.com/turt2live/ietf-mimi-signaling/
+   issues/1))*
+
+4.  Events
+
+   The concept of events is described by Section 5.1 of
+   [I-D.barnes-mimi-arch].  An event is authenticated against its TLS
+   presentation language format (Section 3 of [RFC8446]):
+
+// Consists of a server's signatures using their signing key. The transport
+// specification defines which specific signing key algorithm is used. This
+// document describes *what* a signature covers.
+opaque Signatures;
+struct {
+  // where the event is sent to
+  opaque roomId;
+
+  // the type of event. Defines format for content
+  // See "Event Types" IANA registry.
+  opaque type;
+
+  // if present, the event is a state event
+  opaque [[stateKey]];
+
+  // who or what sent this event
+  opaque sender;
+
+  // binary type-specific event content (TODO(TR): type??)
+  opaque content;
+
+  // the event IDs of the auth events
+  opaque authEvents[];
+
+  // the parent event ID
+  opaque prevEvent;
+
+  // the origin server's content hash of the event
+  uint8 originContentHash[32];
+
+  Signatures hubSignature;
+  Signatures originSignature;
+} Event;
+
+   *TODO(TR): Should we bring over origin_server_ts?  (GH issue
+   (https://github.com/turt2live/ietf-mimi-signaling/issues/2))*
+
+   *TODO(TR): Maximum lengths? (or is this a transport/not-us problem?)
+   (GH issue (https://github.com/turt2live/ietf-mimi-signaling/
+   issues/3))*
+
+   Note that an "event ID" is not specified on the object.  The event ID
+   for an event is the sigil $ followed by the URL-Safe Unpadded
+   Base64-encoded reference hash (Section 4.1) of the event.
+
+   The "origin server" of an event is the server denoted/implied by the
+   sender.
+
+   *TODO(TR): Do we need to describe how events are extensible? ie:
+   being able to add things to the m.room.create event content.  (GH
+   issue (https://github.com/turt2live/ietf-mimi-signaling/issues/4))*
+
+4.1.  Reference Hash
+
+   Events are referenced by ID in relation to each other, forming the
+   room history and auth chain.  If the event ID was a sender-generated
+   value, any server along the send or receive path could "replace" that
+   event with another perfectly legal event, both using the same ID.
+
+   By using a calculated value, namely the reference hash, if a server
+   does try to replace the event then it would result in a completely
+   different event ID.  That event ID becomes impossible to reference as
+   it wouldn't be part of the proper room history.
+
+   To calculate a reference hash, the event is first redacted
+   (Section 4.3) alongside hubSignature and originSignature fields being
+   removed.  The resulting binary is then hashed using SHA256 [RFC6234].
+
+   To further create an event ID, the resulting hash is encoded using
+   URL-Safe Unpadded Base64 and prefixed with the $ sigil.
+
+4.2.  Content Hash
+
+   An event's content hash prevents servers from modifying details of
+   the event not covered by the reference hash itself.  For example, a
+   room name state event doesn't have the name itself covered by a
+   reference hash because it's redacted, so it's instead covered by the
+   content hash, which is in turn covered by the reference hash.  This
+   allows the event to later be redacted without affecting the event ID
+   of that event.
+
+   To calculate a content hash, the following fields are removed from
+   the event first:
+
+   *  originContentHash
+
+   *  hubSignature
+
+   *  originSignature
+
+   *  prevEvent
+
+   *  authEvents
+
+   authEvents and prevEvent are removed because they are populated by
+   the hub server.  The content hash is to preserve the origin server's
+   event, not the hub server's.
+
+   The resulting binary is then hashed using SHA256 [RFC6234].
+
+4.3.  Redaction
+
+   The process of removing fields from an event which aren't important
+   for the overall protocol to operate is known as "redaction".  This
+   document protects fields of events required for signaling to work
+   while a policy document or encryption/security protocol will define
+   their own fields.  For example, the MLS ciphertext for a proposal or
+   commit might be preserved through redaction to avoid breaking the MLS
+   group for future participants.
+
+   The default behaviour for any event type is to remove all fields
+   _not_ specified by Section 4, excluding content.  Individual event
+   types MAY specify their own redaction behaviour for content.
+
+5.  Room Metadata
+
+   Information about the room such as its name, topic (description),
+   avatar, etc is described by state events.  State events are also used
+   for policy control configuration, as specified elsewhere in this
+   document.
+
+   This document describes the following event types for room metadata
+   purposes.
+
+5.1.  m.room.name
+
+   *State key*: Empty string.
+
+   *Content*:
+
+struct {
+  // human-readable name for the room. May be empty or missing to denote
+  // no name.
+  opaque name;
+} MRoomNameEventContent;
+
+   *Redaction considerations*: None.  It is considered a feature that
+   the room name can be redacted to remove unwanted room names.  A
+   redacted m.room.name event is treated the same as a room without an
+   m.room.name event present.
+
+5.2.  m.room.avatar
+
+   *State key*: Empty string.
+
+   *Content*:
+
+   struct {
+     // human-usable image to differentiate the room visually.
+     // TODO(TR): Do we know how images are being sent in MIMI?
+     opaque mediaUri;
+   } MRoomAvatarEventContent;
+
+   *Redaction considerations*: None.  It is considered a feature that
+   the room avatar can be redacted to remove unwanted room avatars.  A
+   redacted m.room.avatar event is treated the same as a room without an
+   m.room.avatar event present.
+
+5.3.  m.room.topic
+
+   *State key*: Empty string.
+
+   *Content*:
+
+   struct {
+     // human-readable description for the room.
+     opaque topic;
+   } MRoomTopicEventContent;
+
+   *Redaction considerations*: None.  It is considered a feature that
+   the room topic can be redacted to remove unwanted room topics.  A
+   redacted m.room.topic event is treated the same as a room without an
+   m.room.topic event present.
+
+6.  Protocol Events
+
+6.1.  m.room.create
+
+   *State key*: Empty string.
+
+   *Content*:
+
+struct {
+  // The policy envelope the room is using.
+  // See the "Policy IDs" IANA registry.
+  opaque policyId;
+
+  // The encryption/security algorithm name in use for the room.
+  // TODO(TR): Does this also need an IANA registry? Currently we expect
+  // this to be `m.mls` or something, maybe with ciphersuite encoded or
+  // defined adjacent?
+  opaque encryptionAlgorithm;
+} MRoomCreateEventContent;
+
+   *Redaction considerations*: All content is _not_ redacted.
+
+6.2.  m.room.user
+
+   *State key*: The user ID the participation event affects.
+
+   *Content*:
+
+opaque ParticipationState; // see policy envelope document
+struct {
+  // The participation state the user is in. Legal values are described by
+  // the policy envelope for the room.
+  ParticipationState participation;
+} MRoomUserEventContent;
+
+   *Redaction considerations*: participation under content is protected
+   from redaction.
+
+7.  Transport
+
+   *TODO(TR): Link to I-D.kohbrok-mimi-transport* describes a series of
+   REST endpoints for communicating between servers.  The following
+   transaction types are defined with respect to signaling.
+
+7.1.  Sending Events
+
+   *TODO(TR): Specifics.  (GH issue (https://github.com/turt2live/ietf-
+   mimi-signaling/issues/5))*
+
+   *  One event at a time
+
+   *  Mark whether it's hub->follower, or follower->hub
+
+   *  When follower->hub, mention that some fields are excluded on the
+      event
+
+      -  Hub then validates the event (proper shape, legal fields,
+         enforce policy)
+
+      -  If valid, hub appends its signatures and other fields, and adds
+         it to the room
+
+      -  Added events are then fanned out to all relevant servers
+
+   *  Unordered sequencing, re-assembled from prevEvent
+
+7.2.  Retrieving Events
+
+   If a server notices that it missed an event, or simply wishes to re-
+   request a particular event, it can use the following operations.
+
+   *TODO(TR): Specifics.  (GH issue (https://github.com/turt2live/ietf-
+   mimi-signaling/issues/5))*
+
+   *  Get event by ID
+
+   *  Get state event by type & state key
+
+   *  Get batch of previous events?
+
+8.  IANA Considerations
+
+   IANA creates the following registries:
+
+   *  Event Types
+
+   *  Policy IDs
+
+8.1.  Event Types Registry
+
+   *TODO(TR): Is this what IANA actually wants?  (GH issue
+   (https://github.com/turt2live/ietf-mimi-signaling/issues/6))*
+
+   An event type is used to determine the type of content being carried
+   by an event.  The type MAY further influence policy, participation,
+   or other aspects of the overall MIMI stack.  For example, an event
+   type for sending an encrypted MLS application message may be
+   specified.
+
+   Event types MUST be prefixed with a reverse domain namespace (i.e.:
+   org.example.my_event).  Event types starting with m. are reserved for
+   use within the MIMI working group.  Event types are issued on a
+   first-come first-serve basis.
+
+   Each event type registration MUST be accompanied by a content
+   definition.  Registrations MUST also indicate whether the event type
+   is for a state event, and if so what describes a legal stateKey.  An
+   event type MUST NOT be used for both a state event and non-state
+   event.
+
+   The following event types and their content definitions are reserved
+   as the first entries in this registry:
+
+   *  m.room.create (Section 6.1)
+
+   *  m.room.user (Section 6.2)
+
+   *  m.room.name (Section 5.1)
+
+   *  m.room.avatar (Section 5.2)
+
+   *  m.room.topic (Section 5.3)
+
+8.1.1.  MIMI Namespace Conventions
+
+   Events in the m. namespace SHOULD use m.room. as a prefix to account
+   for future flexibility and expansion.
+
+8.2.  Policy IDs
+
+   *TODO(TR): Is this what IANA actually wants?(GH issue
+   (https://github.com/turt2live/ietf-mimi-signaling/issues/6))*
+
+   A policy ID is the identifier to describe the policy envelope the
+   room is using.  Policy IDs MUST be prefixed with a reverse domain
+   namespace (i.e.: org.example.my_event).  Policy IDs starting with m.
+   are reserved for use within the MIMI working group.  Policy IDs are
+   issued on a first-come first-serve basis.
+
+   This document does not describe any initial entries for this
+   registry.
+
+8.2.1.  MIMI Namespace Conventions
+
+   Policy IDs in the m. namespace SHOULD be suffixed with an integer to
+   denote relative ordering/stability.  For example, m.0 for an initial
+   "version" of the policy envelope.
+
+9.  References
+
+9.1.  Normative References
+
+   [I-D.barnes-mimi-arch]
+              Barnes, R., "An Architecture for More Instant Messaging
+              Interoperability (MIMI)", Work in Progress, Internet-
+              Draft, draft-barnes-mimi-arch-01, 22 September 2023,
+              <https://datatracker.ietf.org/doc/html/draft-barnes-mimi-
+              arch-01>.
+
+   [I-D.ralston-mimi-terminology]
+              Ralston, T., "MIMI Terminology", Work in Progress,
+              Internet-Draft, draft-ralston-mimi-terminology-02, 10 July
+              2023, <https://datatracker.ietf.org/doc/html/draft-
+              ralston-mimi-terminology-02>.
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/rfc/rfc2119>.
+
+   [RFC4648]  Josefsson, S., "The Base16, Base32, and Base64 Data
+              Encodings", RFC 4648, DOI 10.17487/RFC4648, October 2006,
+              <https://www.rfc-editor.org/rfc/rfc4648>.
+
+   [RFC6234]  Eastlake 3rd, D. and T. Hansen, "US Secure Hash Algorithms
+              (SHA and SHA-based HMAC and HKDF)", RFC 6234,
+              DOI 10.17487/RFC6234, May 2011,
+              <https://www.rfc-editor.org/rfc/rfc6234>.
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
+
+9.2.  Informative References
+
+   [RFC8446]  Rescorla, E., "The Transport Layer Security (TLS) Protocol
+              Version 1.3", RFC 8446, DOI 10.17487/RFC8446, August 2018,
+              <https://www.rfc-editor.org/rfc/rfc8446>.
+
+   [RFC9420]  Barnes, R., Beurdouche, B., Robert, R., Millican, J.,
+              Omara, E., and K. Cohn-Gordon, "The Messaging Layer
+              Security (MLS) Protocol", RFC 9420, DOI 10.17487/RFC9420,
+              July 2023, <https://www.rfc-editor.org/rfc/rfc9420>.
+
+Authors' Addresses
+
+   Travis Ralston
+   The Matrix.org Foundation C.I.C.
+   Email: travisr@matrix.org
+
+
+   Matthew Hodgson
+   The Matrix.org Foundation C.I.C.
+   Email: matthew@matrix.org
