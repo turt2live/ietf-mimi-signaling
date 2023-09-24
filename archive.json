@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2023-09-21T00:21:25.012151+00:00",
+  "timestamp": "2023-09-24T00:23:06.984524+00:00",
   "repo": "turt2live/ietf-mimi-signaling",
   "labels": [
     {
@@ -143,6 +143,22 @@
       "body": "",
       "createdAt": "2023-09-20T21:11:22Z",
       "updatedAt": "2023-09-20T21:11:22Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 7,
+      "id": "I_kwDOKAlNWc5xsBbu",
+      "title": "Hash chaining?",
+      "url": "https://github.com/turt2live/ietf-mimi-signaling/issues/7",
+      "state": "OPEN",
+      "author": "turt2live",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2023-09-21T16:38:07Z",
+      "updatedAt": "2023-09-21T16:38:07Z",
       "closedAt": null,
       "comments": []
     }
