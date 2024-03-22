@@ -1,5 +1,7 @@
 # MIMI Signaling
 
+⚠️⚠️⚠️ **Replaced by https://github.com/bifurcation/ietf-mimi-protocol**
+
 This is the working area for the individual Internet-Draft, "MIMI Signaling".
 
 * [Editor's Copy](https://turt2live.github.io/ietf-mimi-signaling/#go.draft-ralston-mimi-signaling.html)
